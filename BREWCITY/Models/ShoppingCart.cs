@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace BREWCITY.Models
 {
     public class ShoppingCart
@@ -15,9 +16,8 @@ namespace BREWCITY.Models
 
 
         [ForeignKey("Beer")]​
-        public string BeerId { get; set; }
-        public virtual Beer Beer { get; set; }
-        public IEnumerable<Beer> Beers { get; set; }
+        public int BeerId { get; set; }
+        public Beer Beer { get; set; }
 
 
         [ForeignKey("Customer")]

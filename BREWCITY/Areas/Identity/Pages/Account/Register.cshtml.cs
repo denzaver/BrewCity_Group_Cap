@@ -43,10 +43,6 @@ namespace BREWCITY.Areas.Identity.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; }
         public SelectList Roles { get; set; }
-
-        [Required]
-        public string Role { get; set; }
-
         public string ReturnUrl { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
@@ -68,6 +64,8 @@ namespace BREWCITY.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public string Role { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
