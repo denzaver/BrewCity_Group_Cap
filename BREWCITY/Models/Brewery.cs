@@ -17,6 +17,8 @@ namespace BREWCITY.Models
         public string FirstName { get; set; }
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
+
+
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
 
