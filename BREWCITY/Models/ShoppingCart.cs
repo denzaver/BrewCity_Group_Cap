@@ -14,14 +14,13 @@ namespace BREWCITY.Models
         public int Id { get; set; }
         public int Quantity { get; set; }
 
-
-        [ForeignKey("Beer")]​
+        [ForeignKey("Beer")]
         public int BeerId { get; set; }
         public Beer Beer { get; set; }
 
-
         [ForeignKey("Customer")]
-        public virtual Customer Customer { get; set; }
         public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
+        
     }
 }

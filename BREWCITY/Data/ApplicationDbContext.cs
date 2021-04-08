@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BREWCITY.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,10 +10,22 @@ namespace BREWCITY.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
+
+        public DbSet<Admin> Admins {get; set;}
+        public DbSet<Beer> Beers { get; set; }
+        public DbSet<BeerReview> BeerReviews { get; set; }
+        public DbSet<Brewery> Breweries { get; set; }
+        public DbSet<BreweryReview> BreweryReviews { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Sale> Sales { get; set; }
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+        public DbSet<TransactionHistory> TransactionHistories { get; set; }
+  
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
