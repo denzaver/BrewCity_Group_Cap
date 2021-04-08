@@ -10,7 +10,7 @@ namespace BREWCITY.Models
     public class Sale
     {
         [Key]
-        public int saleId { get; set; }
+        public int Id { get; set; }
         public int quantity { get; set; }
 
         [ForeignKey("Beer")]

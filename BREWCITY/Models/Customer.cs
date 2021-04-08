@@ -19,14 +19,17 @@ namespace BREWCITY.Models
         public int Zip { get; set; }
         public string Email { get; set; }
 
+
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
 
         [ForeignKey("Sale")]
-        public Sale SalesId { get; set; }
+        public int SaleId { get; set; }
+        public Sale Sale { get; set; }
 
         [ForeignKey("Beer")]
-        public Beer BeerId { get; set; }
+        public int BeerId { get; set; }
+        public Beer Beer { get; set; }
 
         [ForeignKey("ShoppingCart")]
         public int ShoppingCartId { get; set; }
