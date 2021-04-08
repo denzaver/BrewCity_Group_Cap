@@ -17,10 +17,6 @@ namespace BREWCITY.Models
         [ForeignKey("Beer")]
         public int BeerId { get; set; }
         public Beer Beer { get; set; }
-
-        [ForeignKey("Customer")]
-        public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
         
     }
 }
