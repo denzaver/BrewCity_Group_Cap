@@ -23,10 +23,14 @@ namespace BREWCITY.Controllers
         }
 
         // GET: Breweries
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Breweries.Include(b => b.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var brewery = _context.Breweries.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            return View(brewery);
+
+            //var applicationDbContext = _context.Breweries.Include(b => b.IdentityUser);
+            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Breweries/Details/5
