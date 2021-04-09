@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Edit</h1>
@@ -25,14 +24,14 @@
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="BusinessName" class="control-label"></label>
+                <input asp-for="BusinessName" class="form-control" />
+                <span asp-validation-for="BusinessName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="BusinessRole" class="control-label"></label>
                 <input asp-for="BusinessRole" class="form-control" />
                 <span asp-validation-for="BusinessRole" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Bio" class="control-label"></label>
-                <input asp-for="Bio" class="form-control" />
-                <span asp-validation-for="Bio" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StreetAddress" class="control-label"></label>
@@ -40,9 +39,9 @@
                 <span asp-validation-for="StreetAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Zip" class="control-label"></label>
-                <input asp-for="Zip" class="form-control" />
-                <span asp-validation-for="Zip" class="text-danger"></span>
+                <label asp-for="Zipcode" class="control-label"></label>
+                <input asp-for="Zipcode" class="form-control" />
+                <span asp-validation-for="Zipcode" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>

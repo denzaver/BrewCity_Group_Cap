@@ -249,10 +249,10 @@ namespace BREWCITY.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BusinessName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BusinessRole = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StreetAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Zip = table.Column<int>(type: "int", nullable: false),
+                    Zipcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdentityUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ShoppingCartId = table.Column<int>(type: "int", nullable: false)
@@ -297,17 +297,17 @@ namespace BREWCITY.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "eecf4d73-c432-4f07-84e6-5e212f81a11e", "2242ea70-d65a-492e-be94-164ef87a9bf0", "Brewery", "BREWERY" });
+                values: new object[] { "a47a33d3-6539-4fba-954a-9cc2dee23347", "f7326236-1fbd-4183-865f-64bdf6642d5f", "Brewery", "BREWERY" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "89cbec7d-5cf8-4022-ba12-2fcb37ab6b22", "71462a8c-86b1-4f25-9504-a695dc493cff", "Customer", "CUSTOMER" });
+                values: new object[] { "4ab500ee-9459-47dd-bef3-38cac358d1ac", "219dee00-0f35-4239-914a-6ee3cd2ab275", "Customer", "CUSTOMER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "5cc6b7bf-b205-4c46-875e-a6104890e1ee", "0bed83ab-1ae7-4930-861f-fea445b8fef5", "Admin", "ADMIN" });
+                values: new object[] { "af0959a5-5e83-4055-95e3-0a9e667b80e9", "b688c7cf-c50b-41e0-b638-cb8734241b78", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admins_IdentityUserId",

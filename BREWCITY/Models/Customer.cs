@@ -12,12 +12,18 @@ namespace BREWCITY.Models
     {
         [Key]
         public int Id { get; set; }
+
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
+
+        [Display(Name = "Business Name")]
+        public string BusinessName { get; set; }
         public string BusinessRole { get; set; }
-        public string Bio { get; set; }
         public string StreetAddress { get; set; }
-        public int Zip { get; set; }
+        public string Zipcode { get; set; }
         public string Email { get; set; }
 
 

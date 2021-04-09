@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Index</h1>
@@ -20,16 +19,16 @@
                 @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BusinessRole)
+                @Html.DisplayNameFor(model => model.BusinessName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bio)
+                @Html.DisplayNameFor(model => model.BusinessRole)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.StreetAddress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Zip)
+                @Html.DisplayNameFor(model => model.Zipcode)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
@@ -53,16 +52,16 @@
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BusinessRole)
+                @Html.DisplayFor(modelItem => item.BusinessName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Bio)
+                @Html.DisplayFor(modelItem => item.BusinessRole)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StreetAddress)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Zip)
+                @Html.DisplayFor(modelItem => item.Zipcode)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Email)

@@ -113,7 +113,7 @@ namespace BREWCITY.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Bio")
+                    b.Property<string>("BusinessName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BusinessRole")
@@ -137,8 +137,8 @@ namespace BREWCITY.Migrations
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Zip")
-                        .HasColumnType("int");
+                    b.Property<string>("Zipcode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -218,22 +218,22 @@ namespace BREWCITY.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "eecf4d73-c432-4f07-84e6-5e212f81a11e",
-                            ConcurrencyStamp = "2242ea70-d65a-492e-be94-164ef87a9bf0",
+                            Id = "a47a33d3-6539-4fba-954a-9cc2dee23347",
+                            ConcurrencyStamp = "f7326236-1fbd-4183-865f-64bdf6642d5f",
                             Name = "Brewery",
                             NormalizedName = "BREWERY"
                         },
                         new
                         {
-                            Id = "89cbec7d-5cf8-4022-ba12-2fcb37ab6b22",
-                            ConcurrencyStamp = "71462a8c-86b1-4f25-9504-a695dc493cff",
+                            Id = "4ab500ee-9459-47dd-bef3-38cac358d1ac",
+                            ConcurrencyStamp = "219dee00-0f35-4239-914a-6ee3cd2ab275",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "5cc6b7bf-b205-4c46-875e-a6104890e1ee",
-                            ConcurrencyStamp = "0bed83ab-1ae7-4930-861f-fea445b8fef5",
+                            Id = "af0959a5-5e83-4055-95e3-0a9e667b80e9",
+                            ConcurrencyStamp = "b688c7cf-c50b-41e0-b638-cb8734241b78",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
