@@ -12,7 +12,6 @@ namespace BREWCITY.Models
     {
         [Key]
         public int Id { get; set; }
-        public IdentityUser IdentityUser { get; set; }
 
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
@@ -26,6 +25,7 @@ namespace BREWCITY.Models
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
+        public IdentityUser Identity { get; set; }
         
     }
 }

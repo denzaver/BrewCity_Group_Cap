@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,14 +23,8 @@ namespace BREWCITY.Models
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
+        public IdentityUser IdentityUser { get; set; }
 
-        [ForeignKey("Sale")]
-        public int SaleId { get; set; }
-        public Sale Sale { get; set; }
-
-        [ForeignKey("Beer")]
-        public int BeerId { get; set; }
-        public Beer Beer { get; set; }
 
         [ForeignKey("ShoppingCart")]
         public int ShoppingCartId { get; set; }

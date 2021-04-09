@@ -13,9 +13,9 @@ namespace BREWCITY.Models
         public int Id { get; set; }
         public int quantity { get; set; }
 
-        [ForeignKey("Beer")]
-        public int beerId { get; set; }
-        public  Beer BeerName { get; set;}
+        [ForeignKey("ShoppingCart")]
+        public int ShoppingCartId { get; set; }
+        public ShoppingCart ShoppingCart { get; set; }
 
     }
 }
