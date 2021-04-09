@@ -173,6 +173,16 @@ namespace BREWCITY.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteBeer(int id)
+        {
+            var beer = await _context.Beers.FindAsync(id);
+            _context.Beers.Remove(beer);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
         private bool BreweryExists(int id)
         {
             return _context.Breweries.Any(e => e.Id == id);
