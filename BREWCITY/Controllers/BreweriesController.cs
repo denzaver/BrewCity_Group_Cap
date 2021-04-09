@@ -74,7 +74,20 @@ namespace BREWCITY.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", brewery.IdentityUserId);
-            return View(brewery);
+            return View("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddBeer([Bind("Id,BeerName,Type,Stock,Price")]Beer beer)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(beer);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View("Index");
         }
 
         // GET: Breweries/Edit/5
