@@ -4,14 +4,16 @@ using BREWCITY.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BREWCITY.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210412015036_BeerReview")]
+    partial class BeerReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,6 +164,9 @@ namespace BREWCITY.Migrations
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Topic")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Reviews");
@@ -236,22 +241,22 @@ namespace BREWCITY.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d7e5c8ea-cbc2-4d66-81cf-efae5fefd137",
-                            ConcurrencyStamp = "f97e27aa-a70d-4603-b296-a3f6859dd253",
+                            Id = "bd478bae-f02c-4926-8261-29aa25fba35c",
+                            ConcurrencyStamp = "a158b2e0-c349-4515-a86d-6a019fd08b23",
                             Name = "Brewery",
                             NormalizedName = "BREWERY"
                         },
                         new
                         {
-                            Id = "7e82de51-7342-41f0-bffa-ff154800a55b",
-                            ConcurrencyStamp = "7bb9037c-277b-485d-a150-e6a8006a20eb",
+                            Id = "ed621e53-f343-4791-ba7c-76c67d6297a4",
+                            ConcurrencyStamp = "f3afc328-acfd-4926-a7bf-257350038edc",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "2977ce1c-9089-4508-be3d-02e1cda9e07c",
-                            ConcurrencyStamp = "351ab8f6-41be-426b-9974-3bc2f5a75bff",
+                            Id = "24a3a34b-fa92-4709-b43c-07d15f173e8b",
+                            ConcurrencyStamp = "9958c3fa-105d-4f53-8789-07ef975fb353",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

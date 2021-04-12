@@ -41,6 +41,9 @@ namespace BREWCITY.Controllers
                 return NotFound();
             }
 
+            var Reviews = _context.Reviews;
+            var Sales = _context.Sales;
+
             var brewery = await _context.Breweries
                 .Include(b => b.IdentityUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -49,7 +52,12 @@ namespace BREWCITY.Controllers
                 return NotFound();
             }
 
-            return View(brewery);
+            ViewModel viewModel = new ViewModel();
+            viewModel.Brewery = brewery;
+            viewModel.Reviews = Reviews;
+            viewModel.Sales = Sales;
+
+            return View(viewModel);
         }
 
         // GET: Breweries/Create
