@@ -14,12 +14,12 @@ namespace BREWCITY.Controllers
     public class CustomersController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly BreweryService _breweryService;
+        //private readonly BreweryService _breweryService;
 
-        public CustomersController(ApplicationDbContext context, BreweryService breweryService)
+        public CustomersController(ApplicationDbContext context) //, BreweryService breweryService)
         {
             _context = context;
-            _breweryService = breweryService;
+            //_breweryService = breweryService;
         }
 
         // GET: Customers
@@ -44,15 +44,14 @@ namespace BREWCITY.Controllers
             {
                 return NotFound();
             }
-
             return View(customer);
         }
 
-        public async Task<IActionResult> GetLocalBreweries(string state)
-        {
-            IActionResult actionResult = await _breweryService.GetBreweryList(state);
-            return actionResult;
-        }
+        //public async Task<IActionResult> GetLocalBreweries(string state)
+        //{
+        //    IActionResult actionResult = await _breweryService.GetBreweryList(state);
+        //    return actionResult;
+        //}
 
         // GET: Customers/Create
         public IActionResult Create()
@@ -76,6 +75,15 @@ namespace BREWCITY.Controllers
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             return View(customer);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateReview([Bind("Id,Text,BeerId,CustomerId")] Review review)
+        {
+            _context.Add(review);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Customers/Edit/5
