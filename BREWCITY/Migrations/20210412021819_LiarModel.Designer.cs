@@ -4,14 +4,16 @@ using BREWCITY.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BREWCITY.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210412021819_LiarModel")]
+    partial class LiarModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,8 +98,8 @@ namespace BREWCITY.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ZipCode")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ZipCode")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -113,7 +115,7 @@ namespace BREWCITY.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("BusinessName")
+                    b.Property<string>("Bio")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BusinessRole")
@@ -131,15 +133,20 @@ namespace BREWCITY.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ShoppingCartId")
+                        .HasColumnType("int");
+
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Zipcode")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Zip")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityUserId");
+
+                    b.HasIndex("ShoppingCartId");
 
                     b.ToTable("Customers");
                 });
@@ -192,17 +199,12 @@ namespace BREWCITY.Migrations
                     b.Property<int>("BeerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BeerId");
-
-                    b.HasIndex("CustomerId");
 
                     b.ToTable("ShoppingCarts");
                 });
@@ -236,27 +238,22 @@ namespace BREWCITY.Migrations
                     b.HasData(
                         new
                         {
-
-                            Id = "2bb01caf-f920-4362-a816-0ff23fa7ce62",
-                            ConcurrencyStamp = "694dd4b4-a9d7-48a1-9714-fa234ff8dd71",
-
+                            Id = "d7e5c8ea-cbc2-4d66-81cf-efae5fefd137",
+                            ConcurrencyStamp = "f97e27aa-a70d-4603-b296-a3f6859dd253",
                             Name = "Brewery",
                             NormalizedName = "BREWERY"
                         },
                         new
                         {
-
-                            Id = "2060914b-2f6a-4305-a6fd-dca651b65e44",
-                            ConcurrencyStamp = "5ed48842-5022-41d7-899d-72013415e409",
-
+                            Id = "7e82de51-7342-41f0-bffa-ff154800a55b",
+                            ConcurrencyStamp = "7bb9037c-277b-485d-a150-e6a8006a20eb",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "dc721398-1280-4d57-97c2-3041eddbbe55",
-                            ConcurrencyStamp = "a4f449e7-fe7d-4639-b289-80a4acb2f1db",
-
+                            Id = "2977ce1c-9089-4508-be3d-02e1cda9e07c",
+                            ConcurrencyStamp = "351ab8f6-41be-426b-9974-3bc2f5a75bff",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -462,7 +459,15 @@ namespace BREWCITY.Migrations
                         .WithMany()
                         .HasForeignKey("IdentityUserId");
 
+                    b.HasOne("BREWCITY.Models.ShoppingCart", "ShoppingCart")
+                        .WithMany()
+                        .HasForeignKey("ShoppingCartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("IdentityUser");
+
+                    b.Navigation("ShoppingCart");
                 });
 
             modelBuilder.Entity("BREWCITY.Models.Sale", b =>
@@ -484,15 +489,7 @@ namespace BREWCITY.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BREWCITY.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Beer");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

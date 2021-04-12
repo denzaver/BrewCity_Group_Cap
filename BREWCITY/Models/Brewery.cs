@@ -11,7 +11,7 @@ namespace BREWCITY.Models
     public class Brewery
     {
         [Key]
-        public int Id { get; set; }
+        public int BreweryId { get; set; }
 
         [Display(Name = "First Name")]
         public string FirstName { get; set; }

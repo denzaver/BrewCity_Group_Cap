@@ -7,17 +7,16 @@ using System.Threading.Tasks;
 
 namespace BREWCITY.Models
 {
-    public class Sale
+    public class Review
     {
         [Key]
         public int Id { get; set; }
-        public int quantity { get; set; }
-
-        [ForeignKey("ShoppingCart")]
-        public int ShoppingCartId { get; set; }
+        public string Text { get; set; }
 
         [ForeignKey("Beer")]
         public int BeerId { get; set; }
 
+        [ForeignKey("Customer")]
+        public int CustomerId { get; set; }
     }
 }

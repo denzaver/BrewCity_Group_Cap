@@ -22,6 +22,7 @@ namespace BREWCITY.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Sale> Sales { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+        public DbSet<Review> Reviews { get; set; }
   
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -31,8 +32,10 @@ namespace BREWCITY.Data
                 .HasData(
                 new IdentityRole
                 {
+                    
                     Name = "Brewery",
-                    NormalizedName = "BREWERY"
+                    NormalizedName = "BREWERY",
+                  
                 },
                   new IdentityRole
                   {

@@ -10,7 +10,7 @@ namespace BREWCITY.Models
     public class Beer
     {
         [Key]
-        public int Id { get; set; }
+        public int BeerId { get; set; }
         public string BeerName { get; set; }
         public string Type { get; set; }
         public int Stock { get; set; }
@@ -22,6 +22,8 @@ namespace BREWCITY.Models
         //[ForeignKey("BeerReview")]
 
         //public IEnumerable<BeerReview> BeerReviews { get; set; }
-
+        [ForeignKey("Brewery")]
+        public int BreweryId { get; set; }
+        //fk beer
     }
 }

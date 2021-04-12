@@ -4,14 +4,16 @@ using BREWCITY.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BREWCITY.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210412015036_BeerReview")]
+    partial class BeerReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,8 +98,8 @@ namespace BREWCITY.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ZipCode")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ZipCode")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -113,7 +115,7 @@ namespace BREWCITY.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("BusinessName")
+                    b.Property<string>("Bio")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BusinessRole")
@@ -131,15 +133,20 @@ namespace BREWCITY.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ShoppingCartId")
+                        .HasColumnType("int");
+
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Zipcode")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Zip")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityUserId");
+
+                    b.HasIndex("ShoppingCartId");
 
                     b.ToTable("Customers");
                 });
@@ -155,6 +162,9 @@ namespace BREWCITY.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Topic")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -192,17 +202,12 @@ namespace BREWCITY.Migrations
                     b.Property<int>("BeerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BeerId");
-
-                    b.HasIndex("CustomerId");
 
                     b.ToTable("ShoppingCarts");
                 });
@@ -236,27 +241,22 @@ namespace BREWCITY.Migrations
                     b.HasData(
                         new
                         {
-
-                            Id = "2bb01caf-f920-4362-a816-0ff23fa7ce62",
-                            ConcurrencyStamp = "694dd4b4-a9d7-48a1-9714-fa234ff8dd71",
-
+                            Id = "bd478bae-f02c-4926-8261-29aa25fba35c",
+                            ConcurrencyStamp = "a158b2e0-c349-4515-a86d-6a019fd08b23",
                             Name = "Brewery",
                             NormalizedName = "BREWERY"
                         },
                         new
                         {
-
-                            Id = "2060914b-2f6a-4305-a6fd-dca651b65e44",
-                            ConcurrencyStamp = "5ed48842-5022-41d7-899d-72013415e409",
-
+                            Id = "ed621e53-f343-4791-ba7c-76c67d6297a4",
+                            ConcurrencyStamp = "f3afc328-acfd-4926-a7bf-257350038edc",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "dc721398-1280-4d57-97c2-3041eddbbe55",
-                            ConcurrencyStamp = "a4f449e7-fe7d-4639-b289-80a4acb2f1db",
-
+                            Id = "24a3a34b-fa92-4709-b43c-07d15f173e8b",
+                            ConcurrencyStamp = "9958c3fa-105d-4f53-8789-07ef975fb353",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -462,7 +462,15 @@ namespace BREWCITY.Migrations
                         .WithMany()
                         .HasForeignKey("IdentityUserId");
 
+                    b.HasOne("BREWCITY.Models.ShoppingCart", "ShoppingCart")
+                        .WithMany()
+                        .HasForeignKey("ShoppingCartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("IdentityUser");
+
+                    b.Navigation("ShoppingCart");
                 });
 
             modelBuilder.Entity("BREWCITY.Models.Sale", b =>
@@ -484,15 +492,7 @@ namespace BREWCITY.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BREWCITY.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Beer");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
