@@ -41,8 +41,8 @@ namespace BREWCITY.Controllers
                 return NotFound();
             }
 
-            var Reviews = _context.Reviews;
-            var Sales = _context.Sales;
+            var Reviews = _context.Reviews.ToList();
+            var Sales = _context.Sales.ToList();
 
             var brewery = await _context.Breweries
                 .Include(b => b.IdentityUser)

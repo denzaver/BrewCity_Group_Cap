@@ -9,7 +9,7 @@ namespace BREWCITY.Models
     public class ViewModel
     {
         public Brewery Brewery {get; set;}
-        public DbSet <Review> Reviews { get; set; }
-        public DbSet <Sale> Sales { get; set; }
+        public List<Review> Reviews { get; set; }
+        public List<Sale> Sales { get; set; }
     }
 }
