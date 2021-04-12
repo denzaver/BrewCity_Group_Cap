@@ -14,5 +14,6 @@ namespace BREWCITY.Models
         public int BeerId { get; set; }
         //  maybe??? 
         //public int BreweryId { get; set; }
+        
     }
 }

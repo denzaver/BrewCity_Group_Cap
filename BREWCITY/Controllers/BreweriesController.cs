@@ -40,9 +40,9 @@ namespace BREWCITY.Controllers
             {
                 return NotFound();
             }
+            
 
-            var Reviews = _context.Reviews.ToList();
-            var Sales = _context.Sales.ToList();
+            
 
             var brewery = await _context.Breweries
                 .Include(b => b.IdentityUser)
@@ -51,6 +51,11 @@ namespace BREWCITY.Controllers
             {
                 return NotFound();
             }
+            //Once Beers hav FK pointing to Brewery...
+            //Query Beer table to find all beers with the ID of this brewery
+            //Query Review table to find all Reviews for the Beers we just found
+            var Reviews = _context.Reviews.ToList();
+            var Sales = _context.Sales.ToList();
 
             ViewModel viewModel = new ViewModel();
             viewModel.Brewery = brewery;

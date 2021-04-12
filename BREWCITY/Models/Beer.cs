@@ -22,6 +22,6 @@ namespace BREWCITY.Models
         //[ForeignKey("BeerReview")]
 
         //public IEnumerable<BeerReview> BeerReviews { get; set; }
-
+        //fk beer
     }
 }
