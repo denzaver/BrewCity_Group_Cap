@@ -143,6 +143,37 @@ namespace BREWCITY.Controllers
             return View(brewery);
         }
 
+        public async Task<IActionResult> UpdateBeer(int id, [Bind("Id,BeerName,Type,Stock,Price")] Beer beer)
+        {
+            if (id != beer.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(beer);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BeerExists(beer.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            
+            return View(beer);
+        }
+
         // GET: Breweries/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -186,6 +217,11 @@ namespace BREWCITY.Controllers
         private bool BreweryExists(int id)
         {
             return _context.Breweries.Any(e => e.Id == id);
+        }
+
+        private bool BeerExists(int id)
+        {
+            return _context.Beers.Any(e => e.Id == id);
         }
     }
 }
