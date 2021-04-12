@@ -31,9 +31,5 @@ namespace BREWCITY.Models
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
 
-
-        [ForeignKey("ShoppingCart")]
-        public int ShoppingCartId { get; set; }
-        public ShoppingCart ShoppingCart { get; set; }
     }
 }

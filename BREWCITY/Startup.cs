@@ -1,5 +1,6 @@
 using BREWCITY.ActionFilters;
 using BREWCITY.Data;
+using BREWCITY.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -48,6 +49,7 @@ namespace BREWCITY
             });
 
             services.AddControllersWithViews();
+            services.AddTransient<BreweryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

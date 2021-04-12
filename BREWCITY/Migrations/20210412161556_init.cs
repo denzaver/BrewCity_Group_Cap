@@ -183,7 +183,7 @@ namespace BREWCITY.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BusinessName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ZipCode = table.Column<int>(type: "int", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdentityUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
@@ -192,6 +192,32 @@ namespace BREWCITY.Migrations
                     table.PrimaryKey("PK_Breweries", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Breweries_AspNetUsers_IdentityUserId",
+                        column: x => x.IdentityUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BusinessName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BusinessRole = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StreetAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Zipcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdentityUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Customers_AspNetUsers_IdentityUserId",
                         column: x => x.IdentityUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -228,6 +254,7 @@ namespace BREWCITY.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
                     BeerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -239,37 +266,10 @@ namespace BREWCITY.Migrations
                         principalTable: "Beers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Customers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BusinessName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BusinessRole = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StreetAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Zipcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IdentityUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ShoppingCartId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Customers_AspNetUsers_IdentityUserId",
-                        column: x => x.IdentityUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Customers_ShoppingCarts_ShoppingCartId",
-                        column: x => x.ShoppingCartId,
-                        principalTable: "ShoppingCarts",
+                        name: "FK_ShoppingCarts_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -297,17 +297,17 @@ namespace BREWCITY.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "a47a33d3-6539-4fba-954a-9cc2dee23347", "f7326236-1fbd-4183-865f-64bdf6642d5f", "Brewery", "BREWERY" });
+                values: new object[] { "2bb01caf-f920-4362-a816-0ff23fa7ce62", "694dd4b4-a9d7-48a1-9714-fa234ff8dd71", "Brewery", "BREWERY" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "4ab500ee-9459-47dd-bef3-38cac358d1ac", "219dee00-0f35-4239-914a-6ee3cd2ab275", "Customer", "CUSTOMER" });
+                values: new object[] { "2060914b-2f6a-4305-a6fd-dca651b65e44", "5ed48842-5022-41d7-899d-72013415e409", "Customer", "CUSTOMER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "af0959a5-5e83-4055-95e3-0a9e667b80e9", "b688c7cf-c50b-41e0-b638-cb8734241b78", "Admin", "ADMIN" });
+                values: new object[] { "dc721398-1280-4d57-97c2-3041eddbbe55", "a4f449e7-fe7d-4639-b289-80a4acb2f1db", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admins_IdentityUserId",
@@ -369,11 +369,6 @@ namespace BREWCITY.Migrations
                 column: "IdentityUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Customers_ShoppingCartId",
-                table: "Customers",
-                column: "ShoppingCartId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Sales_ShoppingCartId",
                 table: "Sales",
                 column: "ShoppingCartId");
@@ -382,6 +377,11 @@ namespace BREWCITY.Migrations
                 name: "IX_ShoppingCarts_BeerId",
                 table: "ShoppingCarts",
                 column: "BeerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCarts_CustomerId",
+                table: "ShoppingCarts",
+                column: "CustomerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -405,9 +405,6 @@ namespace BREWCITY.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Customers");
-
-            migrationBuilder.DropTable(
                 name: "Sales");
 
             migrationBuilder.DropTable(
@@ -418,6 +415,9 @@ namespace BREWCITY.Migrations
 
             migrationBuilder.DropTable(
                 name: "Beers");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "Breweries");

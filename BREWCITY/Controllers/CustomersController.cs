@@ -7,22 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BREWCITY.Data;
 using BREWCITY.Models;
+using BREWCITY.Services;
 
 namespace BREWCITY.Controllers
 {
     public class CustomersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly BreweryService _breweryService;
 
-        public CustomersController(ApplicationDbContext context)
+        public CustomersController(ApplicationDbContext context, BreweryService breweryService)
         {
             _context = context;
+            _breweryService = breweryService;
         }
 
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Customers.Include(c => c.IdentityUser).Include(c => c.ShoppingCart);
+            var applicationDbContext = _context.Customers.Include(c => c.IdentityUser);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,7 +39,6 @@ namespace BREWCITY.Controllers
 
             var customer = await _context.Customers
                 .Include(c => c.IdentityUser)
-                .Include(c => c.ShoppingCart)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
@@ -46,10 +48,16 @@ namespace BREWCITY.Controllers
             return View(customer);
         }
 
+        public async Task<IActionResult> GetLocalBreweries(string state)
+        {
+            IActionResult actionResult = await _breweryService.GetBreweryList(state);
+            return actionResult;
+        }
+
         // GET: Customers/Create
         public IActionResult Create()
         {
-
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -58,7 +66,7 @@ namespace BREWCITY.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,BusinessName,BusinessRole,StreetAddress,Zipcode,Email,IdentityUserId,ShoppingCartId")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,BusinessName,BusinessRole,StreetAddress,Zipcode,Email,IdentityUserId")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +75,6 @@ namespace BREWCITY.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            ViewData["ShoppingCartId"] = new SelectList(_context.ShoppingCarts, "Id", "Id", customer.ShoppingCartId);
             return View(customer);
         }
 
@@ -85,7 +92,6 @@ namespace BREWCITY.Controllers
                 return NotFound();
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            ViewData["ShoppingCartId"] = new SelectList(_context.ShoppingCarts, "Id", "Id", customer.ShoppingCartId);
             return View(customer);
         }
 
@@ -94,7 +100,7 @@ namespace BREWCITY.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,BusinessName,BusinessRole,StreetAddress,Zipcode,Email,IdentityUserId,ShoppingCartId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,BusinessName,BusinessRole,StreetAddress,Zipcode,Email,IdentityUserId")] Customer customer)
         {
             if (id != customer.Id)
             {
@@ -122,7 +128,6 @@ namespace BREWCITY.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            ViewData["ShoppingCartId"] = new SelectList(_context.ShoppingCarts, "Id", "Id", customer.ShoppingCartId);
             return View(customer);
         }
 
@@ -136,7 +141,6 @@ namespace BREWCITY.Controllers
 
             var customer = await _context.Customers
                 .Include(c => c.IdentityUser)
-                .Include(c => c.ShoppingCart)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {

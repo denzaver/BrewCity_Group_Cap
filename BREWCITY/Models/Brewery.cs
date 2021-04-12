@@ -22,7 +22,7 @@ namespace BREWCITY.Models
         [Display(Name = "Business Name")]
         public string BusinessName { get; set; }
 
-        public int ZipCode { get; set; }
+        public string ZipCode { get; set; }
 
         public List<Beer> BeerList { get; set; }
 
