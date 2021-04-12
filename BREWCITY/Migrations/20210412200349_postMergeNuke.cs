@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BREWCITY.Migrations
 {
-    public partial class init : Migration
+    public partial class postMergeNuke : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,36 @@ namespace BREWCITY.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BeerId = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sales",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    quantity = table.Column<int>(type: "int", nullable: false),
+                    ShoppingCartId = table.Column<int>(type: "int", nullable: false),
+                    BeerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sales", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -178,7 +208,7 @@ namespace BREWCITY.Migrations
                 name: "Breweries",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    BreweryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -189,7 +219,7 @@ namespace BREWCITY.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Breweries", x => x.Id);
+                    table.PrimaryKey("PK_Breweries", x => x.BreweryId);
                     table.ForeignKey(
                         name: "FK_Breweries_AspNetUsers_IdentityUserId",
                         column: x => x.IdentityUserId,
@@ -228,23 +258,23 @@ namespace BREWCITY.Migrations
                 name: "Beers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    BeerId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BeerName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Stock = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false),
-                    BreweryId = table.Column<int>(type: "int", nullable: true)
+                    BreweryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Beers", x => x.Id);
+                    table.PrimaryKey("PK_Beers", x => x.BeerId);
                     table.ForeignKey(
                         name: "FK_Beers_Breweries_BreweryId",
                         column: x => x.BreweryId,
                         principalTable: "Breweries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "BreweryId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -264,7 +294,7 @@ namespace BREWCITY.Migrations
                         name: "FK_ShoppingCarts_Beers_BeerId",
                         column: x => x.BeerId,
                         principalTable: "Beers",
-                        principalColumn: "Id",
+                        principalColumn: "BeerId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ShoppingCarts_Customers_CustomerId",
@@ -274,40 +304,20 @@ namespace BREWCITY.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Sales",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    quantity = table.Column<int>(type: "int", nullable: false),
-                    ShoppingCartId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sales", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Sales_ShoppingCarts_ShoppingCartId",
-                        column: x => x.ShoppingCartId,
-                        principalTable: "ShoppingCarts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "2977ce1c-9089-4508-be3d-02e1cda9e07c", "351ab8f6-41be-426b-9974-3bc2f5a75bff", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2bb01caf-f920-4362-a816-0ff23fa7ce62", "694dd4b4-a9d7-48a1-9714-fa234ff8dd71", "Brewery", "BREWERY" });
+                values: new object[] { "7e82de51-7342-41f0-bffa-ff154800a55b", "7bb9037c-277b-485d-a150-e6a8006a20eb", "Customer", "CUSTOMER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2060914b-2f6a-4305-a6fd-dca651b65e44", "5ed48842-5022-41d7-899d-72013415e409", "Customer", "CUSTOMER" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "dc721398-1280-4d57-97c2-3041eddbbe55", "a4f449e7-fe7d-4639-b289-80a4acb2f1db", "Admin", "ADMIN" });
+                values: new object[] { "d7e5c8ea-cbc2-4d66-81cf-efae5fefd137", "f97e27aa-a70d-4603-b296-a3f6859dd253", "Brewery", "BREWERY" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admins_IdentityUserId",
@@ -369,11 +379,6 @@ namespace BREWCITY.Migrations
                 column: "IdentityUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sales_ShoppingCartId",
-                table: "Sales",
-                column: "ShoppingCartId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ShoppingCarts_BeerId",
                 table: "ShoppingCarts",
                 column: "BeerId");
@@ -405,13 +410,16 @@ namespace BREWCITY.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Reviews");
+
+            migrationBuilder.DropTable(
                 name: "Sales");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "ShoppingCarts");
 
             migrationBuilder.DropTable(
-                name: "ShoppingCarts");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Beers");

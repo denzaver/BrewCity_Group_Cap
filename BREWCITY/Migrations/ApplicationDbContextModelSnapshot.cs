@@ -47,7 +47,7 @@ namespace BREWCITY.Migrations
 
             modelBuilder.Entity("BREWCITY.Models.Beer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("BeerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -55,7 +55,7 @@ namespace BREWCITY.Migrations
                     b.Property<string>("BeerName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("BreweryId")
+                    b.Property<int>("BreweryId")
                         .HasColumnType("int");
 
                     b.Property<int>("Price")
@@ -67,7 +67,7 @@ namespace BREWCITY.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("BeerId");
 
                     b.HasIndex("BreweryId");
 
@@ -76,7 +76,7 @@ namespace BREWCITY.Migrations
 
             modelBuilder.Entity("BREWCITY.Models.Brewery", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("BreweryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -99,7 +99,7 @@ namespace BREWCITY.Migrations
                     b.Property<string>("ZipCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("BreweryId");
 
                     b.HasIndex("IdentityUserId");
 
@@ -154,6 +154,9 @@ namespace BREWCITY.Migrations
                     b.Property<int>("BeerId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
@@ -169,6 +172,9 @@ namespace BREWCITY.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("BeerId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ShoppingCartId")
                         .HasColumnType("int");
 
@@ -176,8 +182,6 @@ namespace BREWCITY.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ShoppingCartId");
 
                     b.ToTable("Sales");
                 });
@@ -236,29 +240,24 @@ namespace BREWCITY.Migrations
                     b.HasData(
                         new
                         {
-
-                            Id = "2bb01caf-f920-4362-a816-0ff23fa7ce62",
-                            ConcurrencyStamp = "694dd4b4-a9d7-48a1-9714-fa234ff8dd71",
-
-                            Name = "Brewery",
-                            NormalizedName = "BREWERY"
+                            Id = "2977ce1c-9089-4508-be3d-02e1cda9e07c",
+                            ConcurrencyStamp = "351ab8f6-41be-426b-9974-3bc2f5a75bff",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
                         },
                         new
                         {
-
-                            Id = "2060914b-2f6a-4305-a6fd-dca651b65e44",
-                            ConcurrencyStamp = "5ed48842-5022-41d7-899d-72013415e409",
-
+                            Id = "7e82de51-7342-41f0-bffa-ff154800a55b",
+                            ConcurrencyStamp = "7bb9037c-277b-485d-a150-e6a8006a20eb",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "dc721398-1280-4d57-97c2-3041eddbbe55",
-                            ConcurrencyStamp = "a4f449e7-fe7d-4639-b289-80a4acb2f1db",
-
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
+                            Id = "d7e5c8ea-cbc2-4d66-81cf-efae5fefd137",
+                            ConcurrencyStamp = "f97e27aa-a70d-4603-b296-a3f6859dd253",
+                            Name = "Brewery",
+                            NormalizedName = "BREWERY"
                         });
                 });
 
@@ -444,7 +443,9 @@ namespace BREWCITY.Migrations
                 {
                     b.HasOne("BREWCITY.Models.Brewery", null)
                         .WithMany("BeerList")
-                        .HasForeignKey("BreweryId");
+                        .HasForeignKey("BreweryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BREWCITY.Models.Brewery", b =>
@@ -463,17 +464,6 @@ namespace BREWCITY.Migrations
                         .HasForeignKey("IdentityUserId");
 
                     b.Navigation("IdentityUser");
-                });
-
-            modelBuilder.Entity("BREWCITY.Models.Sale", b =>
-                {
-                    b.HasOne("BREWCITY.Models.ShoppingCart", "ShoppingCart")
-                        .WithMany()
-                        .HasForeignKey("ShoppingCartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ShoppingCart");
                 });
 
             modelBuilder.Entity("BREWCITY.Models.ShoppingCart", b =>

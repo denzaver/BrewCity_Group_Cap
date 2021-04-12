@@ -32,20 +32,25 @@ namespace BREWCITY.Data
                 .HasData(
                 new IdentityRole
                 {
-                    
-                    Name = "Brewery",
-                    NormalizedName = "BREWERY",
-                  
+                    Id = "2977ce1c-9089-4508-be3d-02e1cda9e07c",
+                    Name = "Admin",
+                    NormalizedName = "ADMIN",
+                    ConcurrencyStamp = "351ab8f6-41be-426b-9974-3bc2f5a75bff"
+
                 },
                   new IdentityRole
                   {
+                      Id = "7e82de51-7342-41f0-bffa-ff154800a55b",
                       Name = "Customer",
-                      NormalizedName = "CUSTOMER"
+                      NormalizedName = "CUSTOMER",
+                      ConcurrencyStamp = "7bb9037c-277b-485d-a150-e6a8006a20eb"
                   },
                  new IdentityRole
                  {
-                     Name = "Admin",
-                     NormalizedName = "ADMIN"
+                     Id = "d7e5c8ea-cbc2-4d66-81cf-efae5fefd137",
+                     Name = "Brewery",
+                     NormalizedName = "BREWERY",
+                     ConcurrencyStamp = "f97e27aa-a70d-4603-b296-a3f6859dd253"
                  });
         }
     }
