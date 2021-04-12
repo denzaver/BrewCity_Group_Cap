@@ -46,7 +46,7 @@ namespace BREWCITY.Controllers
 
             var brewery = await _context.Breweries
                 .Include(b => b.IdentityUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.BreweryId == id);
             if (brewery == null)
             {
                 return NotFound();
@@ -54,13 +54,21 @@ namespace BREWCITY.Controllers
             //Once Beers hav FK pointing to Brewery...
             //Query Beer table to find all beers with the ID of this brewery
             //Query Review table to find all Reviews for the Beers we just found
-            var Reviews = _context.Reviews.ToList();
-            var Sales = _context.Sales.ToList();
-
+            List<Beer> Beers = _context.Beers.Where(x => x.BreweryId == brewery.BreweryId).ToList();
+            List<Review> reviews = null;
+            List<Sale> sales = null;
+            for (int i = 0; i < Beers.Count(); i++)
+            {
+               reviews = (List<Review>)_context.Reviews.Where(x => x.BeerId == Beers[i].BeerId);
+               sales = (List<Sale>)_context.Sales.Where(x => x.BeerId == Beers[i].BeerId);
+            }
             ViewModel viewModel = new ViewModel();
             viewModel.Brewery = brewery;
-            viewModel.Reviews = Reviews;
-            viewModel.Sales = Sales;
+            viewModel.Reviews = reviews;
+            viewModel.Sales = sales;
+            
+            
+            
 
             return View(viewModel);
         }
@@ -77,7 +85,7 @@ namespace BREWCITY.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,BusinessName,ZipCode,Email,IdentityUserId")] Brewery brewery)
+        public async Task<IActionResult> Create([Bind("BreweryId,FirstName,LastName,BusinessName,ZipCode,Email,IdentityUserId")] Brewery brewery)
         {
             if (ModelState.IsValid)
             {
@@ -127,7 +135,7 @@ namespace BREWCITY.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,BusinessName,ZipCode,Email,IdentityUserId")] Brewery brewery)
         {
-            if (id != brewery.Id)
+            if (id != brewery.BreweryId)
             {
                 return NotFound();
             }
@@ -141,7 +149,7 @@ namespace BREWCITY.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BreweryExists(brewery.Id))
+                    if (!BreweryExists(brewery.BreweryId))
                     {
                         return NotFound();
                     }
@@ -156,9 +164,9 @@ namespace BREWCITY.Controllers
             return View(brewery);
         }
 
-        public async Task<IActionResult> UpdateBeer(int id, [Bind("Id,BeerName,Type,Stock,Price")] Beer beer)
+        public async Task<IActionResult> UpdateBeer(int id, [Bind("BeerId,BeerName,Type,Stock,Price")] Beer beer)
         {
-            if (id != beer.Id)
+            if (id != beer.BeerId)
             {
                 return NotFound();
             }
@@ -172,7 +180,7 @@ namespace BREWCITY.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BeerExists(beer.Id))
+                    if (!BeerExists(beer.BeerId))
                     {
                         return NotFound();
                     }
@@ -197,7 +205,7 @@ namespace BREWCITY.Controllers
 
             var brewery = await _context.Breweries
                 .Include(b => b.IdentityUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.BreweryId == id);
             if (brewery == null)
             {
                 return NotFound();
@@ -229,12 +237,12 @@ namespace BREWCITY.Controllers
 
         private bool BreweryExists(int id)
         {
-            return _context.Breweries.Any(e => e.Id == id);
+            return _context.Breweries.Any(e => e.BreweryId == id);
         }
 
         private bool BeerExists(int id)
         {
-            return _context.Beers.Any(e => e.Id == id);
+            return _context.Beers.Any(e => e.BeerId == id);
         }
     }
 }
