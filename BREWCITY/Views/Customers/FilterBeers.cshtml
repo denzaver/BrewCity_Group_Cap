@@ -1,0 +1,58 @@
+﻿@model IEnumerable<BREWCITY.Models.Beer>
+
+@{
+    ViewData["Title"] = "FilterBeers";
+}
+
+<h1>FilterBeers</h1>
+
+<p>
+    @using (Html.BeginForm())
+    {
+        <text>Beer Type</text>@Html.DropDownList("type", new SelectList(ViewBag.Type))
+        <text>Brewery</text>@Html.DropDownList("type", new SelectList(ViewBag.Brewery))
+        <input type="submit" value="Search" />
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BeerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BeerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stock)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.BeerId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.BeerId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.BeerId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
