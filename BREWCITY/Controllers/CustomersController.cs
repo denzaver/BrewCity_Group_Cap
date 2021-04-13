@@ -29,6 +29,12 @@ namespace BREWCITY.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public IActionResult FilterBeers(string type, string breweryName)
+        {
+            ViewBag.Type = _context.Beers.Select(x => x.Type).Distinct();
+            ViewBag.Brewery = _context.Breweries.Select(x => x.BusinessName).Distinct();
+        }
+
         // GET: Customers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
