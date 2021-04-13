@@ -92,9 +92,12 @@ namespace BREWCITY.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateReview([Bind("Id,Text,BeerId,CustomerId")] Review review)
+        public async Task<IActionResult> CreateReview(int id, Brewery brewery, [Bind("Id,Text,BeerId,CustomerId")] Review review)
         {
-            _context.Add(review);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            review.CustomerId = customer.Id;
+            review.BeerId = id;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
