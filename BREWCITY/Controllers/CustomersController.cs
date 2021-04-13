@@ -14,12 +14,13 @@ namespace BREWCITY.Controllers
     public class CustomersController : Controller
     {
         private readonly ApplicationDbContext _context;
-        //private readonly BreweryService _breweryService;
+        private readonly IGetLocalBreweriesService _getLocalBreweriesService;
+        
 
-        public CustomersController(ApplicationDbContext context) //, BreweryService breweryService)
+        public CustomersController(ApplicationDbContext context, IGetLocalBreweriesService getLocalBreweriesService) 
         {
             _context = context;
-            //_breweryService = breweryService;
+            _getLocalBreweriesService = getLocalBreweriesService;
         }
 
         // GET: Customers
