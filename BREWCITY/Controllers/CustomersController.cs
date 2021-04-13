@@ -33,6 +33,9 @@ namespace BREWCITY.Controllers
         {
             ViewBag.Type = _context.Beers.Select(x => x.Type).Distinct();
             ViewBag.Brewery = _context.Breweries.Select(x => x.BusinessName).Distinct();
+            var brewery = _context.Breweries.Where(x => x.BusinessName == breweryName).FirstOrDefault();
+            var beerList = _context.Beers.Where(x => x.Type == type || x.BreweryId == brewery.BreweryId);
+            return View(beerList);
         }
 
         // GET: Customers/Details/5
