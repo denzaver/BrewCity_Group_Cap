@@ -43,7 +43,7 @@ namespace BREWCITY.Controllers
         }
 
         // GET: Customers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -94,8 +94,12 @@ namespace BREWCITY.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateReview([Bind("Id,Text,BeerId,CustomerId")] Review review)
+        public async Task<IActionResult> CreateReview(int id, [Bind("Id,Text,BeerId,CustomerId")] Review review)
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            review.CustomerId = customer.Id;
+            review.BeerId = id;
             _context.Add(review);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -152,6 +156,14 @@ namespace BREWCITY.Controllers
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             return View(customer);
+        }
+
+        public IActionResult MyReviews()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            var reviews = _context.Reviews.Where(x => x.CustomerId == customer.Id);
+            return View(reviews);
         }
 
         // GET: Customers/Delete/5
