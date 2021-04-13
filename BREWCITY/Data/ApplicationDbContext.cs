@@ -53,5 +53,8 @@ namespace BREWCITY.Data
                      ConcurrencyStamp = "f97e27aa-a70d-4603-b296-a3f6859dd253"
                  });
         }
+  
+
+        public DbSet<BREWCITY.Models.JsonBrewery> JsonBrewery { get; set; }
     }
 }
