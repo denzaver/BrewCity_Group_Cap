@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BREWCITY.Data;
 using BREWCITY.Models;
 using BREWCITY.Services;
+using System.Security.Claims;
 
 namespace BREWCITY.Controllers
 {
@@ -23,10 +24,13 @@ namespace BREWCITY.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Customers.Include(c => c.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            var breweries = _context.Breweries.Where(x => x.ZipCode == customer.Zipcode);
+            return View(breweries);
         }
 
         public IActionResult FilterBeers(string type, string breweryName)
