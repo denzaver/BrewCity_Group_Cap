@@ -50,7 +50,7 @@ namespace BREWCITY.Controllers
         public async Task<IActionResult> GetList(string state, string city)
         {
             state = "New Mexico";
-            var actionResult = await _getLocalBreweriesServices.GetLocalBreweries(state);
+            var actionResult = await _getLocalBreweriesService.GetLocalBreweries(state);
             city = "Albuquerque";
             var filteredResult = actionResult.Where(b => b.City == city).ToList();
             JsonBrewery[] actionResultArray = filteredResult.ToArray();
