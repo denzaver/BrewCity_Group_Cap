@@ -50,14 +50,16 @@ namespace BREWCITY.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .Include(c => c.IdentityUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
+            var beers = _context.Beers.Where(br => br.BreweryId == id);
+
+            //var customer = await _context.Customers
+            //    .Include(c => c.IdentityUser)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            if (beers == null)
             {
                 return NotFound();
             }
-            return View(customer);
+            return View(beers);
         }
 
         //public async Task<IActionResult> GetLocalBreweries(string state)
@@ -92,12 +94,9 @@ namespace BREWCITY.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateReview(int id, Brewery brewery, [Bind("Id,Text,BeerId,CustomerId")] Review review)
+        public async Task<IActionResult> CreateReview([Bind("Id,Text,BeerId,CustomerId")] Review review)
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
-            review.CustomerId = customer.Id;
-            review.BeerId = id;
+            _context.Add(review);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
