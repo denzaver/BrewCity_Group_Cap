@@ -166,6 +166,28 @@ namespace BREWCITY.Controllers
             return View(reviews);
         }
 
+        //Get Review
+        public async Task<IActionResult> DeleteReview(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var review = await _context.Reviews.Include(x => x.Text).FirstOrDefaultAsync(x => x.Id == id);
+            if(review == null)
+            {
+                return NotFound();
+            }
+            return View(review);
+        }
+        public async Task<IActionResult> DeleteReview(int id)
+        {
+            var review = await _context.Reviews.FindAsync(id);
+            _context.Reviews.Remove(review);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(MyReviews));
+        }
+
         // GET: Customers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
