@@ -34,7 +34,6 @@ namespace BREWCITY.Services
                     string jsonResult = await response.Content.ReadAsStringAsync();
                     return (IActionResult)JsonConvert.DeserializeObject<JsonBrewery>(jsonResult);
 
-
                 }
             };
             return null;
