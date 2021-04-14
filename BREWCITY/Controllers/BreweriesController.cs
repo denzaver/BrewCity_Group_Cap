@@ -102,7 +102,11 @@ namespace BREWCITY.Controllers
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", brewery.IdentityUserId);
             return View("Index");
         }
-
+        public IActionResult AddBeer()
+        {
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
+            return View();
+        }
         [HttpPost, ActionName("AddBeer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddBeer([Bind("Id,BeerName,Type,Stock,Price")]Beer beer)
