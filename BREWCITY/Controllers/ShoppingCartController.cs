@@ -1,4 +1,5 @@
 ﻿using BREWCITY.Models;
+using BREWCITY.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace BREWCITY.Controllers
             var shoppingCartViewModel = new ShoppingCartViewModel //takes the total items and amount and puts them into this view model
             {
                 ShoppingCart = _shoppingCart,
-                ShoppingCartTotal = _shoppingCart.GetShoppingCartItems()
+                ShoppingCartTotal = _shoppingCart.GetShoppingCartTotal()
             };
             return View(shoppingCartViewModel);
         }
