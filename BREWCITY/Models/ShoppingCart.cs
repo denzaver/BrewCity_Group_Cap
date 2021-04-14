@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BREWCITY.Data;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,9 +11,13 @@ namespace BREWCITY.Models
 {
     public class ShoppingCart
     {
+        // the shopping cart is going to work by checking if the user already has a session & an active shopping cart
+        //
+        private readonly ApplicationDbContext _context;
+
         [Key]
-        public int Id { get; set; }
-        public int Quantity { get; set; }
+        public int ShoppingCartId { get; set; }
+        public List<ShoppingCartItem> ShoppingCartItems { get; set; }
 
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
@@ -22,5 +27,11 @@ namespace BREWCITY.Models
         public int BeerId { get; set; }
         public Beer Beer { get; set; }
 
+
+        public ShoppingCart(ApplicationDbContext context)
+        {
+            _context = context;
+        }
     }
+
 }
