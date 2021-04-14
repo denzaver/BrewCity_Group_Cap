@@ -15,5 +15,17 @@ namespace BREWCITY.Controllers
         {
             _shoppingCart = shoppingCart;
         }
+
+        public ViewResult Index() //using this to return the cart total into our view
+        {
+            _shoppingCart.ShoppingCartItems = _shoppingCart.GetShoppingCartItems(); //retreives all items and sets the shoppingcartitems prop in shopping cart
+
+            var shoppingCartViewModel = new ShoppingCartViewModel //takes the total items and amount and puts them into this view model
+            {
+                ShoppingCart = _shoppingCart,
+                ShoppingCartTotal = _shoppingCart.GetShoppingCartItems()
+            };
+            return View(shoppingCartViewModel);
+        }
     }
 }
