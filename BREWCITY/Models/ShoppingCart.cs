@@ -75,8 +75,31 @@ namespace BREWCITY.Models
         //public int RemoveFromCart(Beer beer) // this is an int because we are decreasing the amount of a SINGLE item
         //    // first we need to make sure the beer actually exists
         //{
+        
+        public int RemoveFromCart(Beer beer) // this is an int because we are decreasing the amount of a SINGLE item
+        {
+            var shoppingCartItem = _context.ShoppingCartItems.SingleOrDefault(
+            s => s.Beer.BeerId == beer.BeerId && s.ShoppingCartId == ShoppingCartId); //we are making sure the shopping cart Id exists, same logic as the AddToCart
 
+            var localAmount = 0;  //variable being used as a counter to decrease the amount of the item in the cart
+
+            if (shoppingCartItem != null)
+            {
+                if(shoppingCartItem.Amount > 1)
+                {
+                    shoppingCartItem.Amount--;
+                    localAmount = shoppingCartItem.Amount;
+                }
+                else
+                {
+                    _context.ShoppingCartItems.Remove(shoppingCartItem);
+                }
+            }
+            _context.SaveChanges();
+            return localAmount;
         }
+
+        
     }
 
 }
