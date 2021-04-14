@@ -9,11 +9,11 @@ namespace BREWCITY.Controllers
 {
     public class ShoppingCartController : Controller
     {
-        private readonly ShoppingCart shoppingCart;
+        private readonly ShoppingCart _shoppingCart;
 
-        public ShoppingCartController()
+        public ShoppingCartController(ShoppingCart shoppingCart)
         {
-
+            _shoppingCart = shoppingCart;
         }
     }
 }
