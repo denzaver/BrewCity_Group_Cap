@@ -26,8 +26,13 @@ namespace BREWCITY.Controllers
         public IActionResult Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var brewery = _context.Breweries.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            return View(brewery);
+            var brewery = _context.Breweries.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            if(brewery == null)
+            {
+                return NotFound();
+            }
+            var beers = _context.Beers.Where(br => br.BreweryId == brewery.BreweryId);
+            return View(beers);
 
             //var applicationDbContext = _context.Breweries.Include(b => b.IdentityUser);
             //return View(await applicationDbContext.ToListAsync());
@@ -98,7 +103,7 @@ namespace BREWCITY.Controllers
             return View("Index");
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("AddBeer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddBeer([Bind("Id,BeerName,Type,Stock,Price")]Beer beer)
         {

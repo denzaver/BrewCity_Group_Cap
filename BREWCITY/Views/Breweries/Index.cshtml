@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BREWCITY.Models.Brewery>
+﻿@model IEnumerable<BREWCITY.Models.Beer>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,28 +7,25 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="AddBeer">Add Beer</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => model.BeerName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.Type)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BusinessName)
+                @Html.DisplayNameFor(model => model.Stock)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ZipCode)
+                @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdentityUser)
+                @Html.DisplayNameFor(model => model.BreweryId)
             </th>
             <th></th>
         </tr>
@@ -37,27 +34,24 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.BeerName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @Html.DisplayFor(modelItem => item.Type)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BusinessName)
+                @Html.DisplayFor(modelItem => item.Stock)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ZipCode)
+                @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
+                @Html.DisplayFor(modelItem => item.BreweryId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdentityUser.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.BreweryId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.BreweryId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.BreweryId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.BeerId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.BeerId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.BeerId">Delete</a>
             </td>
         </tr>
 }
