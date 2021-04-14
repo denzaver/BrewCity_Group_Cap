@@ -52,6 +52,122 @@ namespace BREWCITY.Data
                      NormalizedName = "BREWERY",
                      ConcurrencyStamp = "f97e27aa-a70d-4603-b296-a3f6859dd253"
                  });
+
+            builder.Entity<Brewery>().HasData(
+                new Brewery
+                {
+                    BreweryId = 1,
+                    FirstName = "Brian",
+                    LastName = "Hayes",
+                    BusinessName = "Manhattan Project",
+                    ZipCode = "75087",
+                    Email = "brian@Hotmail.com",
+                    IdentityUserId = "f97e27aa-a70d-4603-b296-a3f6859dd253"
+                },
+                new Brewery
+                {
+                    BreweryId = 2,
+                    FirstName = "Kate",
+                    LastName = "Reed",
+                    BusinessName = "New Belgium",
+                    ZipCode = "75087",
+                    Email = "kate@icloud.com",
+                    IdentityUserId = "f97e27aa-a70d-4603-b296-a3f6859dd253"
+                },
+                new Brewery
+                {
+                    BreweryId = 3,
+                    FirstName = "Rosco",
+                    LastName = "Ocsor",
+                    BusinessName = "Altstadt",
+                    ZipCode = "75087",
+                    Email = "Rosco@gmail",
+                    IdentityUserId = "f97e27aa-a70d-4603-b296-a3f6859dd253"
+                }
+                );
+            builder.Entity<Beer>().HasData(
+                new Beer
+                {
+                    BeerId = 1,
+                    BeerName = "Half Life",
+                    Type = "IPA",
+                    Stock = 10,
+                    Price = 100,
+                    BreweryId = 1
+                },
+                new Beer
+                {
+                    BeerId = 2,
+                    BeerName = "Plutonium",
+                    Type = "Porter",
+                    Stock = 10,
+                    Price = 100,
+                    BreweryId = 1
+                },
+                new Beer
+                {
+                    BeerId = 3,
+                    BeerName = "Necessary Evil",
+                    Type = "Lager",
+                    Stock = 10,
+                    Price = 100,
+                    BreweryId = 1
+                },
+                new Beer
+                {
+                    BeerId = 4,
+                    BeerName = "Voodoo Ranger",
+                    Type = "IPA",
+                    Stock = 10,
+                    Price = 100,
+                    BreweryId = 2
+                },
+                new Beer
+                {
+                    BeerId = 5,
+                    BeerName = "Fat Tire",
+                    Type = "Amber",
+                    Stock = 10,
+                    Price = 100,
+                    BreweryId = 2
+                },
+                new Beer
+                {
+                    BeerId = 6,
+                    BeerName = "Accumulation",
+                    Type = "Weisse",
+                    Stock = 10,
+                    Price = 100,
+                    BreweryId = 2
+                },
+                new Beer
+                {
+                    BeerId = 7,
+                    BeerName = "Hefeweizen",
+                    Type = "Weisse",
+                    Stock = 10,
+                    Price = 100,
+                    BreweryId = 3
+                },
+                new Beer
+                {
+                    BeerId = 8,
+                    BeerName = "Amber",
+                    Type = "Amber",
+                    Stock = 10,
+                    Price = 100,
+                    BreweryId = 3
+                },
+                new Beer
+                {
+                    BeerId = 9,
+                    BeerName = "Lager",
+                    Type = "Lager",
+                    Stock = 10,
+                    Price = 100,
+                    BreweryId = 3
+                }
+                );
         }
     }
 }
