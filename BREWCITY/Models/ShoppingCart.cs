@@ -107,6 +107,16 @@ namespace BREWCITY.Models
                 .Include(s => s.Beer) //inlcudes all the beer(items)
                 .ToList()); //converts to a list
         }
+
+        public void ClearCart()
+        {
+            // first need to get all the items from the DbContect that belong to the shopping cart Id
+            var cartItems = _context.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId);
+
+            _context.ShoppingCartItems.RemoveRange(cartItems);
+            _context.SaveChanges();
+        }
     }
+
 
 }
