@@ -116,6 +116,15 @@ namespace BREWCITY.Models
             _context.ShoppingCartItems.RemoveRange(cartItems);
             _context.SaveChanges();
         }
+
+        public decimal GetShoppingCartTotal()
+        {
+            var total = _context.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId)
+                .Select(c => c.Beer.Price * c.Amount).Sum();
+
+            return total;
+
+        }
     }
 
 
