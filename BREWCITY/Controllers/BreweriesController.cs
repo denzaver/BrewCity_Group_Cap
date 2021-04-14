@@ -111,6 +111,9 @@ namespace BREWCITY.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddBeer([Bind("Id,BeerName,Type,Stock,Price")]Beer beer)
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var brewery = _context.Breweries.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            beer.BreweryId = brewery.BreweryId;
             if (ModelState.IsValid)
             {
                 _context.Add(beer);
@@ -173,6 +176,23 @@ namespace BREWCITY.Controllers
             return View(brewery);
         }
 
+        public async Task<IActionResult> UpdateBeer(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var beer = await _context.Beers.FindAsync(id);
+            if (beer == null)
+            {
+                return NotFound();
+            }
+            return View(beer);
+        }
+
+        [HttpPost, ActionName("UpdateBeer")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateBeer(int id, [Bind("BeerId,BeerName,Type,Stock,Price")] Beer beer)
         {
             if (id != beer.BeerId)
@@ -201,7 +221,7 @@ namespace BREWCITY.Controllers
                 return RedirectToAction(nameof(Index));
             }
             
-            return View(beer);
+            return View("Index");
         }
 
         // GET: Breweries/Delete/5
@@ -234,7 +254,7 @@ namespace BREWCITY.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-         [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteBeer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteBeer(int id)
         {
