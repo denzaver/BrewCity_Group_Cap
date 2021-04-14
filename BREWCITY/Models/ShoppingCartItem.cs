@@ -7,8 +7,8 @@ namespace BREWCITY.Models
 {
     public class ShoppingCartItem
     {
-        [Key]
-        public int ShoppingCartItemId { get; set; }
+        
+        public string ShoppingCartItemId { get; set; }
         public string ShoppingCartId {get; set;}
         public Beer Beer { get; set; }
         public int Amount { get; set; }
