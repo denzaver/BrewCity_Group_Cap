@@ -193,12 +193,15 @@ namespace BREWCITY.Controllers
 
         [HttpPost, ActionName("UpdateBeer")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateBeer(int id, [Bind("BeerId,BeerName,Type,Stock,Price")] Beer beer)
+        public async Task<IActionResult> UpdateBeer([Bind("BeerId,BeerName,Type,Stock,Price")] Beer beer)
         {
-            if (id != beer.BeerId)
-            {
-                return NotFound();
-            }
+            // if (id != beer.BeerId)
+            //{
+            //  return NotFound();
+            //}
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var brewery = _context.Breweries.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            beer.BreweryId = brewery.BreweryId;
 
             if (ModelState.IsValid)
             {
