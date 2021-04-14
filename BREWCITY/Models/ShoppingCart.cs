@@ -1,5 +1,6 @@
 ﻿using BREWCITY.Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -99,7 +100,13 @@ namespace BREWCITY.Models
             return localAmount;
         }
 
-        
+        public List<ShoppingCartItem> GetShoppingCartItems()
+        {
+            // returning shopping cart items, 'if now', otherwise, we go to shoppingcartitems dbset where the shopping cart id matches this shopping cart
+            return ShoppingCartItems ?? (ShoppingCartItems = _context.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId)
+                .Include(s => s.Beer) //inlcudes all the beer(items)
+                .ToList()); //converts to a list
+        }
     }
 
 }
