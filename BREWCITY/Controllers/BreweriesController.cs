@@ -256,6 +256,21 @@ namespace BREWCITY.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> DeleteBeer(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var beer = _context.Beers.Where(m => m.BeerId == id).FirstOrDefault();
+            if (beer == null)
+            {
+                return NotFound();
+            }
+
+            return View(beer);
+        }
 
         [HttpPost, ActionName("DeleteBeer")]
         [ValidateAntiForgeryToken]
