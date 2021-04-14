@@ -28,5 +28,10 @@ namespace BREWCITY.Controllers
             };
             return View(shoppingCartViewModel);
         }
+
+        //public RedirectToActionResult AddToShoppingCart(int beerId) //action that adds item to the shopping cart and redirects to the updates shopping cart
+        //{
+        //    ShoppingCart selectedBeer = 
+        //}
     }
 }

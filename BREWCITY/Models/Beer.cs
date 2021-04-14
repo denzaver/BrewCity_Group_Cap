@@ -12,9 +12,17 @@ namespace BREWCITY.Models
         [Key]
         public int BeerId { get; set; }
         public string BeerName { get; set; }
-        public string Type { get; set; }
+        public string Description { get; set; }
         public int Stock { get; set; }
-        public int Price { get; set; }
+        public decimal Price { get; set; }
+        public string ImageThumbnailUrl { get; set; }
+        public bool OnSale { get; set; }
+        public bool InStock { get; set; }
+
+        [ForeignKey("Category")]
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+
 
 
         // ************************  NEED TO CREATE WHEN OTHER MODELS/VIEWS ARE SET UP AND RUNNIG ************************
