@@ -15,12 +15,13 @@ namespace BREWCITY.Controllers
     public class CustomersController : Controller
     {
         private readonly ApplicationDbContext _context;
-        //private readonly BreweryService _breweryService;
+        private readonly IGetLocalBreweriesService _getLocalBreweriesService;
+        
 
-        public CustomersController(ApplicationDbContext context) //, BreweryService breweryService)
+        public CustomersController(ApplicationDbContext context, IGetLocalBreweriesService getLocalBreweriesService) 
         {
             _context = context;
-            //_breweryService = breweryService;
+            _getLocalBreweriesService = getLocalBreweriesService;
         }
 
         // GET: Customers
@@ -100,12 +101,16 @@ namespace BREWCITY.Controllers
             }
             return View(beers);
         }
+        public async Task<IActionResult> GetList(string state, string city)
+        {
+            state = "New Mexico";
+            var actionResult = await _getLocalBreweriesService.GetLocalBreweries(state);
+            city = "Albuquerque";
+            var filteredResult = actionResult.Where(b => b.City == city).ToList();
+            JsonBrewery[] actionResultArray = filteredResult.ToArray();
+            return View(actionResultArray);
+        }
 
-        //public async Task<IActionResult> GetLocalBreweries(string state)
-        //{
-        //    IActionResult actionResult = await _breweryService.GetBreweryList(state);
-        //    return actionResult;
-        //}
 
         // GET: Customers/Create
         public IActionResult Create()

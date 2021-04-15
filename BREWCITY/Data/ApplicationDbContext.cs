@@ -23,6 +23,7 @@ namespace BREWCITY.Data
         public DbSet<Sale> Sales { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Location> Locations { get; set; }
   
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -53,5 +54,8 @@ namespace BREWCITY.Data
                      ConcurrencyStamp = "f97e27aa-a70d-4603-b296-a3f6859dd253"
                  });
         }
+  
+
+        public DbSet<BREWCITY.Models.JsonBrewery> JsonBrewery { get; set; }
     }
 }

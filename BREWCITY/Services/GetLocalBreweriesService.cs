@@ -1,17 +1,21 @@
-﻿using BREWCITY.Models;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
+using BREWCITY.Models;
+using Newtonsoft.Json;
+using System.Net.Http;
+using Microsoft.AspNetCore.Mvc;
+
 namespace BREWCITY.Services
 {
-    public interface BreweryService
+    public class GetLocalBreweriesService : IGetLocalBreweriesService
     {
-
-        public async Task<IActionResult> GetBreweryList(string state)
+        public GetLocalBreweriesService()
+        {
+               
+        }
+        public async Task<List<JsonBrewery>> GetLocalBreweries(string state)
         {
             string uri = "https://brianiswu-open-brewery-db-v1.p.rapidapi.com/breweries/search?query=" + state;
             var client = new HttpClient();
@@ -32,7 +36,7 @@ namespace BREWCITY.Services
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResult = await response.Content.ReadAsStringAsync();
-                    return (IActionResult)JsonConvert.DeserializeObject<JsonBrewery>(jsonResult);
+                    return JsonConvert.DeserializeObject<List<JsonBrewery>>(jsonResult);
 
 
                 }
@@ -40,6 +44,10 @@ namespace BREWCITY.Services
             return null;
 
         }
+
+
+
+
 
     }
 }
