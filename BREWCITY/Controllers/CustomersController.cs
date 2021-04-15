@@ -60,6 +60,7 @@ namespace BREWCITY.Controllers
             {
                 return View("CreateDeliveryDetails");//fill in later, create deliver details
             }
+            
             var state = details.State;
             var city = details.City;
             var actionResult = await _getLocalBreweriesService.GetLocalBreweries(state);
@@ -204,6 +205,135 @@ namespace BREWCITY.Controllers
             _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private bool UnsecuredCreditCardInformationExists(int id)
+        {
+            return _context.UnsecuredCreditCardInformations.Any(e => e.Id == id);
+        }
+        // GET: UnsecuredCreditCardInformations
+        public async Task<IActionResult> PaymentMethods()
+        {
+            var applicationDbContext = _context.UnsecuredCreditCardInformations.Include(u => u.Customer);
+            return View(await applicationDbContext.ToListAsync());
+        }
+        public async Task<IActionResult> PaymentMethodDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var unsecuredCreditCardInformation = await _context.UnsecuredCreditCardInformations
+                .Include(u => u.Customer)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (unsecuredCreditCardInformation == null)
+            {
+                return NotFound();
+            }
+
+            return View(unsecuredCreditCardInformation);
+        }
+
+        // GET: UnsecuredCreditCardInformations/Create
+        public IActionResult CreatePaymentMethod()
+        {
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePaymentMethod([Bind("Id,CustomerId,CompanyNameOnCreditCardRequired,CreditCardNumber,Month,Year,CVC")] UnsecuredCreditCardInformation unsecuredCreditCardInformation)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(unsecuredCreditCardInformation);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(PaymentMethods));
+            }
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", unsecuredCreditCardInformation.CustomerId);
+            return View(unsecuredCreditCardInformation);
+        }
+
+        // GET: UnsecuredCreditCardInformations/Edit/5
+        public async Task<IActionResult> EditPaymentMethod(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var unsecuredCreditCardInformation = await _context.UnsecuredCreditCardInformations.FindAsync(id);
+            if (unsecuredCreditCardInformation == null)
+            {
+                return NotFound();
+            }
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", unsecuredCreditCardInformation.CustomerId);
+            return View(unsecuredCreditCardInformation);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPaymentMethod(int id, [Bind("Id,CustomerId,CompanyNameOnCreditCardRequired,CreditCardNumber,Month,Year,CVC")] UnsecuredCreditCardInformation unsecuredCreditCardInformation)
+        {
+            if (id != unsecuredCreditCardInformation.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(unsecuredCreditCardInformation);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UnsecuredCreditCardInformationExists(unsecuredCreditCardInformation.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(PaymentMethods));
+            }
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", unsecuredCreditCardInformation.CustomerId);
+            return View(unsecuredCreditCardInformation);
+        }
+
+
+        public async Task<IActionResult> DeletePaymentMethod(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var unsecuredCreditCardInformation = await _context.UnsecuredCreditCardInformations
+                .Include(u => u.Customer)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (unsecuredCreditCardInformation == null)
+            {
+                return NotFound();
+            }
+
+            return View(unsecuredCreditCardInformation);
+        }
+
+        // POST: UnsecuredCreditCardInformations/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePaymnentMethodConfirmed(int id)
+        {
+            var unsecuredCreditCardInformation = await _context.UnsecuredCreditCardInformations.FindAsync(id);
+            _context.UnsecuredCreditCardInformations.Remove(unsecuredCreditCardInformation);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(PaymentMethods));
         }
 
         private bool CustomerExists(int id)

@@ -1,0 +1,60 @@
+﻿@model BREWCITY.Models.UnsecuredCreditCardInformation
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>UnsecuredCreditCardInformation</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Customer)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Customer.Id)
+        </dd class>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CompanyNameOnCreditCardRequired)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CompanyNameOnCreditCardRequired)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreditCardNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreditCardNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Month)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Month)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Year)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Year)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CVC)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CVC)
+        </dd>
+    </dl>
+    
+    <form asp-action="DeletePaymentMethod">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="DeletePaymentMethod" class="btn btn-danger" /> |
+        <a asp-action="PaymentMethods">Back to List</a>
+        <a asp-action="GetList">Start Shopping!</a>
+
+    </form>
+</div>

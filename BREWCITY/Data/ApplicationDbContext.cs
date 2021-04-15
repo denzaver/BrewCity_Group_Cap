@@ -26,7 +26,7 @@ namespace BREWCITY.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<DeliveryDetails> DeliveryDetailss { get; set; }
         public DbSet<Category> Categories { get; set; }
-  
+        public DbSet<UnsecuredCreditCardInformation> UnsecuredCreditCardInformations { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
