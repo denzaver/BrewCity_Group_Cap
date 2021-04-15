@@ -33,7 +33,7 @@ namespace BREWCITY.Models
 
         public Beer GetBeerById(int beerId)
         {
-            return _context.Beers.FirstOrDefault(b => b.BeerId == beerId);
+            throw new NotImplementedException();
         }
     }
 }
