@@ -15,7 +15,7 @@ namespace BREWCITY.Models
         {
             _context = context;
         }
-        public IEnumerable<Beer> GetAllBear
+        public IEnumerable<Beer> GetAllBeer
         {
             get
             {

@@ -1,4 +1,5 @@
 ﻿using BREWCITY.Models;
+using BREWCITY.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,14 @@ namespace BREWCITY.Controllers
         {
             _beerRepository = beerRepository;
             _categoryRepository = categoryRepository;
+        }
+
+        public IActionResult List()
+        {
+            var beerListViewModel = new BeerListViewModel();
+            beerListViewModel.Beers = _beerRepository.GetAllBeer;
+            /*beerListViewModel.CurrentCategory = _categoryRepository.GetAllCategories*/;
+            return View(beerListViewModel);
         }
     }
 }

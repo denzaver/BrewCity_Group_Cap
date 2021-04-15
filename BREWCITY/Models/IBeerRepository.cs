@@ -7,7 +7,7 @@ namespace BREWCITY.Models
 {
     public interface IBeerRepository
     {
-        IEnumerable<Beer> GetAllBear { get; }
+        IEnumerable<Beer> GetAllBeer { get; }
         IEnumerable<Beer> GetBeerOnSale { get; }
         Beer GetBeerById(int beerId);
     }
