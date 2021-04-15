@@ -121,6 +121,8 @@ namespace BREWCITY.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,BusinessName,BusinessRole,StreetAddress,Zipcode,Email,IdentityUserId")] Customer customer)
         {
+            
+
             if (ModelState.IsValid)
             {
                 customer.IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
