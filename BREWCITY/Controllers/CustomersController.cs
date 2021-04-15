@@ -36,8 +36,10 @@ namespace BREWCITY.Controllers
         public IActionResult FilterBeers()
         {
             var types = _context.Beers.Select(x => x.Type).Distinct().ToList();
+            types.Add("none");
             var breweryNames = _context.Breweries.Select(x => x.BusinessName).Distinct().ToList();
-            ViewBag.Type = new SelectList(types, null);
+            breweryNames.Add("none");
+            ViewBag.Type = new SelectList(types);
             ViewBag.Brewery = new SelectList(breweryNames);
             var beers = _context.Beers;
             return View(beers);
@@ -47,10 +49,35 @@ namespace BREWCITY.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult FilterBeers(string type, string breweryName)
         {
+            if(type != "none" && breweryName != "none")
+            {
+
+            }
+            else if(type != "none")
+            {
+
+            }
+            else if(breweryName != "none")
+            {
+
+            }
+            else
+            {
+
+            }
+
+
+
+
+
+
+
             var types = _context.Beers.Select(x => x.Type).Distinct().ToList();
             var breweryNames = _context.Breweries.Select(x => x.BusinessName).Distinct().ToList();
             ViewBag.Type = new SelectList(types);
+            types.Add("none");
             ViewBag.Brewery = new SelectList(breweryNames);
+            breweryNames.Add("none");
             var brewery = _context.Breweries.Where(x => x.BusinessName == breweryName).FirstOrDefault();
             var beerList = _context.Beers.Where(x => x.Type == type ^ x.BreweryId == brewery.BreweryId);
             return View(beerList);
