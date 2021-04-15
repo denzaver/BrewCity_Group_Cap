@@ -47,8 +47,12 @@ namespace BREWCITY.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult FilterBeers(string type, string breweryName)
         {
+            var types = _context.Beers.Select(x => x.Type).Distinct().ToList();
+            var breweryNames = _context.Breweries.Select(x => x.BusinessName).Distinct().ToList();
+            ViewBag.Type = new SelectList(types);
+            ViewBag.Brewery = new SelectList(breweryNames);
             var brewery = _context.Breweries.Where(x => x.BusinessName == breweryName).FirstOrDefault();
-            var beerList = _context.Beers.Where(x => x.Type == type || x.BreweryId == brewery.BreweryId);
+            var beerList = _context.Beers.Where(x => x.Type == type ^ x.BreweryId == brewery.BreweryId);
             return View(beerList);
         }
 
