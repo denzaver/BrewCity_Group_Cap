@@ -29,6 +29,11 @@ namespace BREWCITY.Controllers
 
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            if(customer == null)
+            {
+                return View("Create");
+            }
+
             var breweries = _context.Breweries.Where(x => x.ZipCode == customer.Zipcode);
             return View(breweries);
         }

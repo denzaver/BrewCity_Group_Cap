@@ -22,12 +22,12 @@ namespace BREWCITY.ActionFilters
             {
                 if (_claimsPrincipal.IsInRole("Customer"))
                 {
-                    context.Result = new RedirectToActionResult("Create",
+                    context.Result = new RedirectToActionResult("Index",
                     "Customers", null);
                 }
                 else if (_claimsPrincipal.IsInRole("Brewery"))
                 {
-                    context.Result = new RedirectToActionResult("Create",
+                    context.Result = new RedirectToActionResult("Index",
                     "Breweries", null);
                 }
             }

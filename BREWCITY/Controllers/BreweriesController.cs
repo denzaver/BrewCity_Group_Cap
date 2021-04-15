@@ -29,7 +29,7 @@ namespace BREWCITY.Controllers
             var brewery = _context.Breweries.Where(c => c.IdentityUserId == userId).FirstOrDefault();
             if(brewery == null)
             {
-                return NotFound();
+                return View("Create");
             }
             var beers = _context.Beers.Where(br => br.BreweryId == brewery.BreweryId);
             return View(beers);
