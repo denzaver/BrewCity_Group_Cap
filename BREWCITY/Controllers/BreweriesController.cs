@@ -45,13 +45,12 @@ namespace BREWCITY.Controllers
             {
                 return NotFound();
             }
-            
 
-            
 
-            var brewery = await _context.Breweries
-                .Include(b => b.IdentityUser)
-                .FirstOrDefaultAsync(m => m.BreweryId == id);
+
+
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var brewery = _context.Breweries.Where(c => c.IdentityUserId == userId).FirstOrDefault();
             if (brewery == null)
             {
                 return NotFound();
@@ -62,13 +61,15 @@ namespace BREWCITY.Controllers
             List<Beer> Beers = _context.Beers.Where(x => x.BreweryId == brewery.BreweryId).ToList();
             List<Review> reviews = null;
             List<Sale> sales = null;
+            ViewModel viewModel = new ViewModel();
             for (int i = 0; i < Beers.Count(); i++)
             {
-               reviews = (List<Review>)_context.Reviews.Where(x => x.BeerId == Beers[i].BeerId);
-               sales = (List<Sale>)_context.Sales.Where(x => x.BeerId == Beers[i].BeerId);
+               reviews = _context.Reviews.Where(x => x.BeerId == Beers[i].BeerId).ToList();
+               sales = _context.Sales.Where(x => x.BeerId == Beers[i].BeerId).ToList();
+            
             }
-            ViewModel viewModel = new ViewModel();
-            viewModel.Brewery = brewery;
+            
+            
             viewModel.Reviews = reviews;
             viewModel.Sales = sales;
             
