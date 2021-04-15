@@ -9,8 +9,8 @@
 <p>
     @using (Html.BeginForm())
     {
-        <text>Beer Type</text>@Html.DropDownList("type", new SelectList(ViewBag.Type))
-        <text>Brewery</text>@Html.DropDownList("type", new SelectList(ViewBag.Brewery))
+        <select name="type" asp-items="@ViewBag.Type"></select>
+        <select name="breweryName" asp-items="@ViewBag.Brewery"></select>
         <input type="submit" value="Search" />
     }
 </p>
