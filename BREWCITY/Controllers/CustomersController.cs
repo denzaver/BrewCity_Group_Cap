@@ -222,7 +222,7 @@ namespace BREWCITY.Controllers
             {
                 return NotFound();
             }
-            var review = await _context.Reviews.Include(x => x.Text).FirstOrDefaultAsync(x => x.ReviewId == id);
+            var review = _context.Reviews.Where(x => x.ReviewId == id);
             if(review == null)
             {
                 return NotFound();
