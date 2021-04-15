@@ -37,7 +37,7 @@ namespace BREWCITY.Controllers
         {
             var types = _context.Beers.Select(x => x.Type).Distinct().ToList();
             var breweryNames = _context.Breweries.Select(x => x.BusinessName).Distinct().ToList();
-            ViewBag.Type = new SelectList(types);
+            ViewBag.Type = new SelectList(types, null);
             ViewBag.Brewery = new SelectList(breweryNames);
             var beers = _context.Beers;
             return View(beers);
