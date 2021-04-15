@@ -49,38 +49,36 @@ namespace BREWCITY.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult FilterBeers(string type, string breweryName)
         {
-            if(type != "none" && breweryName != "none")
-            {
-
-            }
-            else if(type != "none")
-            {
-
-            }
-            else if(breweryName != "none")
-            {
-
-            }
-            else
-            {
-
-            }
-
-
-
-
-
-
-
             var types = _context.Beers.Select(x => x.Type).Distinct().ToList();
             var breweryNames = _context.Breweries.Select(x => x.BusinessName).Distinct().ToList();
             ViewBag.Type = new SelectList(types);
             types.Add("none");
             ViewBag.Brewery = new SelectList(breweryNames);
             breweryNames.Add("none");
-            var brewery = _context.Breweries.Where(x => x.BusinessName == breweryName).FirstOrDefault();
-            var beerList = _context.Beers.Where(x => x.Type == type ^ x.BreweryId == brewery.BreweryId);
-            return View(beerList);
+            Brewery brewery = _context.Breweries.Where(x => x.BusinessName == breweryName).FirstOrDefault(); 
+            List<Beer> beerList = null;
+
+            if (type != "none" && breweryName != "none")
+            {
+                  
+                 beerList = _context.Beers.Where(x => x.Type == type && x.BreweryId == brewery.BreweryId).ToList();
+                return View(beerList);
+            }
+            else if(type != "none")
+            {
+                beerList = _context.Beers.Where(x => x.Type == type).ToList();
+                return View(beerList);
+            }
+            else if(breweryName != "none")
+            {
+                beerList = _context.Beers.Where(x => x.BreweryId == brewery.BreweryId).ToList();
+                return View(beerList);
+            }
+            else
+            {
+                return View(NotFound());
+            }
+
         }
 
         // GET: Customers/Details/5
