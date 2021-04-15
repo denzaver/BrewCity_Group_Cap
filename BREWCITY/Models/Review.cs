@@ -10,13 +10,15 @@ namespace BREWCITY.Models
     public class Review
     {
         [Key]
-        public int Id { get; set; }
+        public int ReviewId { get; set; }
         public string Text { get; set; }
 
         [ForeignKey("Beer")]
         public int BeerId { get; set; }
+        public Beer Beer { get; set; }
 
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
     }
 }

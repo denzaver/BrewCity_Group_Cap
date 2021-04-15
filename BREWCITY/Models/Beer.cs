@@ -24,6 +24,7 @@ namespace BREWCITY.Models
         //public IEnumerable<BeerReview> BeerReviews { get; set; }
         [ForeignKey("Brewery")]
         public int BreweryId { get; set; }
+        public Brewery Brewery { get; set; }
         //fk beer
     }
 }

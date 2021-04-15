@@ -134,6 +134,13 @@ namespace BREWCITY.Controllers
             return View(customer);
         }
 
+        //Get
+        public IActionResult CreateReview()
+        {
+            return View();
+
+        }
+
         [HttpPost, ActionName("CreateReview")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateReview(int id, [Bind("Id,Text,BeerId,CustomerId")] Review review)
@@ -215,7 +222,7 @@ namespace BREWCITY.Controllers
             {
                 return NotFound();
             }
-            var review = await _context.Reviews.Include(x => x.Text).FirstOrDefaultAsync(x => x.Id == id);
+            var review = await _context.Reviews.Include(x => x.Text).FirstOrDefaultAsync(x => x.ReviewId == id);
             if(review == null)
             {
                 return NotFound();
@@ -286,7 +293,7 @@ namespace BREWCITY.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditReview(int id, [Bind("Id, Text, BeerId, CustomerId")] Review review)
         {
-            if (id != review.Id)
+            if (id != review.ReviewId)
             {
                 return NotFound();
             }
@@ -300,7 +307,7 @@ namespace BREWCITY.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(review.Id))
+                    if (!CustomerExists(review.ReviewId))
                     {
                         return NotFound();
                     }
