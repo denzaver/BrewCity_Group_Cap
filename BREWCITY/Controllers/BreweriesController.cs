@@ -39,7 +39,7 @@ namespace BREWCITY.Controllers
         }
 
         // GET: Breweries/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -257,7 +257,7 @@ namespace BREWCITY.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        public async Task<IActionResult> DeleteBeer(int? id)
+        public IActionResult DeleteBeer(int? id)
         {
             if (id == null)
             {
@@ -292,5 +292,8 @@ namespace BREWCITY.Controllers
         {
             return _context.Beers.Any(e => e.BeerId == id);
         }
+        
+
+        
     }
 }

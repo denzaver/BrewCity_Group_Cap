@@ -216,13 +216,13 @@ namespace BREWCITY.Controllers
         }
 
         //Get Review
-        public async Task<IActionResult> DeleteReview(int? id)
+        public IActionResult DeleteReview(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var review = _context.Reviews.Where(x => x.ReviewId == id);
+            var review = _context.Reviews.Where(x => x.ReviewId == id).FirstOrDefault();
             if(review == null)
             {
                 return NotFound();
@@ -316,9 +316,9 @@ namespace BREWCITY.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(MyReviews));
             }
-            return View(review);
+            return View(nameof(MyReviews));
         }
     }
 }
