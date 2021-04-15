@@ -33,10 +33,18 @@ namespace BREWCITY.Controllers
             return View(breweries);
         }
 
-        public IActionResult FilterBeers(string type, string breweryName)
+        public IActionResult FilterBeers()
         {
             ViewBag.Type = _context.Beers.Select(x => x.Type).Distinct();
             ViewBag.Brewery = _context.Breweries.Select(x => x.BusinessName).Distinct();
+            var beers = _context.Beers;
+            return View(beers);
+        }
+
+        [HttpPost, ActionName("FilterBeers")]
+        [ValidateAntiForgeryToken]
+        public IActionResult FilterBeers(string type, string breweryName)
+        {
             var brewery = _context.Breweries.Where(x => x.BusinessName == breweryName).FirstOrDefault();
             var beerList = _context.Beers.Where(x => x.Type == type || x.BreweryId == brewery.BreweryId);
             return View(beerList);
@@ -84,6 +92,7 @@ namespace BREWCITY.Controllers
         {
             if (ModelState.IsValid)
             {
+                customer.IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
