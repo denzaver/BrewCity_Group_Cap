@@ -19,7 +19,7 @@ namespace BREWCITY.Models
         {
             get
             {
-                return _context.Beers.Include(c => c.Category);
+                return _context.Beers.Include(c => c.Type);
             }
         }
 
@@ -27,7 +27,7 @@ namespace BREWCITY.Models
         {
             get
             {
-                return _context.Beers.Include(c => c.Category).Where(b => b.OnSale);
+                return _context.Beers.Include(c => c.Type).Where(b => b.OnSale);
             }
         }
 

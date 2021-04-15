@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace BREWCITY.Models
 {
-    public interface ICategoryRepository
-    {
-        IEnumerable<Category> GetAllCategories { get; }
-    }
+    //public interface ICategoryRepository
+    //{
+    //    IEnumerable<Category> GetAllCategories { get; }
+    //}
 }

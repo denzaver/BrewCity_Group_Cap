@@ -1,13 +1,18 @@
 ﻿@model IEnumerable<BREWCITY.Models.Beer>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "FilterBeers";
 }
 
-<h1>Index</h1>
+<h1>FilterBeers</h1>
 
 <p>
-    <a asp-action="AddBeer">Add Beer</a>
+    @using (Html.BeginForm())
+    {
+        <select name="type" asp-items="@ViewBag.Type"></select>
+        <select name="breweryName" asp-items="@ViewBag.Brewery"></select>
+        <input type="submit" value="Search" />
+    }
 </p>
 <table class="table">
     <thead>
@@ -23,9 +28,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BreweryId)
             </th>
             <th></th>
         </tr>
@@ -46,12 +48,10 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BreweryId)
-            </td>
-            <td>
-                <a asp-action="UpdateBeer" asp-route-id="@item.BeerId">Edit</a> |
+                <a asp-action="Edit" asp-route-id="@item.BeerId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.BeerId">Details</a> |
-                <a asp-action="DeleteBeer" asp-route-id="@item.BeerId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.BeerId">Delete</a>
+                <a asp-action="CreateReview" asp-route-id="@item.BeerId">Review</a>
             </td>
         </tr>
 }

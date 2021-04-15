@@ -24,7 +24,6 @@ namespace BREWCITY.Models
 
         public string ZipCode { get; set; }
 
-        public List<Beer> BeerList { get; set; }
 
         public string Email { get; set; }
 

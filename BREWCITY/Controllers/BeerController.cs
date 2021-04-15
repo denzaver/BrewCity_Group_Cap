@@ -11,12 +11,12 @@ namespace BREWCITY.Controllers
     public class BeerController : Controller 
     {
         private readonly IBeerRepository _beerRepository;
-        private readonly ICategoryRepository _categoryRepository;
+        //private readonly ICategoryRepository _categoryRepository;
 
-        public BeerController(IBeerRepository beerRepository, ICategoryRepository categoryRepository)
+        public BeerController(IBeerRepository beerRepository)
         {
             _beerRepository = beerRepository;
-            _categoryRepository = categoryRepository;
+            //_categoryRepository = categoryRepository;
         }
 
         public IActionResult List()

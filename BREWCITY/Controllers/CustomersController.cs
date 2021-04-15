@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BREWCITY.Data;
 using BREWCITY.Models;
 using BREWCITY.Services;
+using System.Security.Claims;
 
 namespace BREWCITY.Controllers
 {
@@ -23,28 +24,52 @@ namespace BREWCITY.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Customers.Include(c => c.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            var breweries = _context.Breweries.Where(x => x.ZipCode == customer.Zipcode);
+            return View(breweries);
+        }
+
+        public IActionResult FilterBeers()
+        {
+            var types = _context.Beers.Select(x => x.Type).Distinct().ToList();
+            var breweryNames = _context.Breweries.Select(x => x.BusinessName).Distinct().ToList();
+            ViewBag.Type = new SelectList(types);
+            ViewBag.Brewery = new SelectList(breweryNames);
+            var beers = _context.Beers;
+            return View(beers);
+        }
+
+        [HttpPost, ActionName("FilterBeers")]
+        [ValidateAntiForgeryToken]
+        public IActionResult FilterBeers(string type, string breweryName)
+        {
+            var brewery = _context.Breweries.Where(x => x.BusinessName == breweryName).FirstOrDefault();
+            var beerList = _context.Beers.Where(x => x.Type == type || x.BreweryId == brewery.BreweryId);
+            return View(beerList);
         }
 
         // GET: Customers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .Include(c => c.IdentityUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
+            var beers = _context.Beers.Where(br => br.BreweryId == id);
+
+            //var customer = await _context.Customers
+            //    .Include(c => c.IdentityUser)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            if (beers == null)
             {
                 return NotFound();
             }
-            return View(customer);
+            return View(beers);
         }
 
         //public async Task<IActionResult> GetLocalBreweries(string state)
@@ -69,6 +94,7 @@ namespace BREWCITY.Controllers
         {
             if (ModelState.IsValid)
             {
+                customer.IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -77,10 +103,14 @@ namespace BREWCITY.Controllers
             return View(customer);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("CreateReview")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateReview([Bind("Id,Text,BeerId,CustomerId")] Review review)
+        public async Task<IActionResult> CreateReview(int id, [Bind("Id,Text,BeerId,CustomerId")] Review review)
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            review.CustomerId = customer.Id;
+            review.BeerId = id;
             _context.Add(review);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -139,6 +169,38 @@ namespace BREWCITY.Controllers
             return View(customer);
         }
 
+        public IActionResult MyReviews()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            var reviews = _context.Reviews.Where(x => x.CustomerId == customer.Id);
+            return View(reviews);
+        }
+
+        //Get Review
+        public async Task<IActionResult> DeleteReview(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var review = await _context.Reviews.Include(x => x.Text).FirstOrDefaultAsync(x => x.Id == id);
+            if(review == null)
+            {
+                return NotFound();
+            }
+            return View(review);
+        }
+        [HttpPost, ActionName("DeleteReview")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteReview(int id)
+        {
+            var review = await _context.Reviews.FindAsync(id);
+            _context.Reviews.Remove(review);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(MyReviews));
+        }
+
         // GET: Customers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -172,6 +234,53 @@ namespace BREWCITY.Controllers
         private bool CustomerExists(int id)
         {
             return _context.Customers.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> EditReview(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var review = await _context.Reviews.FindAsync(id);
+            if (review == null)
+            {
+                return NotFound();
+            }
+            return View(review);
+        }
+
+        [HttpPost, ActionName("EditReview")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditReview(int id, [Bind("Id, Text, BeerId, CustomerId")] Review review)
+        {
+            if (id != review.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(review);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CustomerExists(review.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(review);
         }
     }
 }

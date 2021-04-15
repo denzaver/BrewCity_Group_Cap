@@ -26,8 +26,13 @@ namespace BREWCITY.Controllers
         public IActionResult Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var brewery = _context.Breweries.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            return View(brewery);
+            var brewery = _context.Breweries.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            if(brewery == null)
+            {
+                return NotFound();
+            }
+            var beers = _context.Beers.Where(br => br.BreweryId == brewery.BreweryId);
+            return View(beers);
 
             //var applicationDbContext = _context.Breweries.Include(b => b.IdentityUser);
             //return View(await applicationDbContext.ToListAsync());
@@ -40,13 +45,12 @@ namespace BREWCITY.Controllers
             {
                 return NotFound();
             }
-            
 
-            
 
-            var brewery = await _context.Breweries
-                .Include(b => b.IdentityUser)
-                .FirstOrDefaultAsync(m => m.BreweryId == id);
+
+
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var brewery = _context.Breweries.Where(c => c.IdentityUserId == userId).FirstOrDefault();
             if (brewery == null)
             {
                 return NotFound();
@@ -57,13 +61,15 @@ namespace BREWCITY.Controllers
             List<Beer> Beers = _context.Beers.Where(x => x.BreweryId == brewery.BreweryId).ToList();
             List<Review> reviews = null;
             List<Sale> sales = null;
+            ViewModel viewModel = new ViewModel();
             for (int i = 0; i < Beers.Count(); i++)
             {
-               reviews = (List<Review>)_context.Reviews.Where(x => x.BeerId == Beers[i].BeerId);
-               sales = (List<Sale>)_context.Sales.Where(x => x.BeerId == Beers[i].BeerId);
+               reviews = _context.Reviews.Where(x => x.BeerId == Beers[i].BeerId).ToList();
+               sales = _context.Sales.Where(x => x.BeerId == Beers[i].BeerId).ToList();
+            
             }
-            ViewModel viewModel = new ViewModel();
-            viewModel.Brewery = brewery;
+            
+            
             viewModel.Reviews = reviews;
             viewModel.Sales = sales;
             
@@ -97,11 +103,18 @@ namespace BREWCITY.Controllers
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", brewery.IdentityUserId);
             return View("Index");
         }
-
-        [HttpPost]
+        public IActionResult AddBeer()
+        {
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
+            return View();
+        }
+        [HttpPost, ActionName("AddBeer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddBeer([Bind("Id,BeerName,Type,Stock,Price")]Beer beer)
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var brewery = _context.Breweries.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            beer.BreweryId = brewery.BreweryId;
             if (ModelState.IsValid)
             {
                 _context.Add(beer);
@@ -164,12 +177,32 @@ namespace BREWCITY.Controllers
             return View(brewery);
         }
 
-        public async Task<IActionResult> UpdateBeer(int id, [Bind("BeerId,BeerName,Type,Stock,Price")] Beer beer)
+        public async Task<IActionResult> UpdateBeer(int? id)
         {
-            if (id != beer.BeerId)
+            if (id == null)
             {
                 return NotFound();
             }
+
+            var beer = await _context.Beers.FindAsync(id);
+            if (beer == null)
+            {
+                return NotFound();
+            }
+            return View(beer);
+        }
+
+        [HttpPost, ActionName("UpdateBeer")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateBeer([Bind("BeerId,BeerName,Type,Stock,Price")] Beer beer)
+        {
+            // if (id != beer.BeerId)
+            //{
+            //  return NotFound();
+            //}
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var brewery = _context.Breweries.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            beer.BreweryId = brewery.BreweryId;
 
             if (ModelState.IsValid)
             {
@@ -192,7 +225,7 @@ namespace BREWCITY.Controllers
                 return RedirectToAction(nameof(Index));
             }
             
-            return View(beer);
+            return View("Index");
         }
 
         // GET: Breweries/Delete/5
@@ -224,8 +257,23 @@ namespace BREWCITY.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> DeleteBeer(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-         [HttpPost, ActionName("Delete")]
+            var beer = _context.Beers.Where(m => m.BeerId == id).FirstOrDefault();
+            if (beer == null)
+            {
+                return NotFound();
+            }
+
+            return View(beer);
+        }
+
+        [HttpPost, ActionName("DeleteBeer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteBeer(int id)
         {

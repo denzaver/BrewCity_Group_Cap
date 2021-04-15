@@ -24,7 +24,7 @@ namespace BREWCITY.Data
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public IEnumerable<Category> Categories { get; internal set; }
+        //public IEnumerable<Category> Categories { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
