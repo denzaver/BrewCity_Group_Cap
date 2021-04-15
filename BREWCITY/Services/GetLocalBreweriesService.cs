@@ -1,0 +1,54 @@
+﻿using BREWCITY.Models;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+namespace BREWCITY.Services
+{
+    public class GetLocalBreweriesService : IGetLocalBreweriesService
+    {
+        public GetLocalBreweriesService()
+        {
+
+        }
+        public async Task<List<JsonBrewery>> GetLocalBreweries(string state)
+        {
+            string uri = "https://brianiswu-open-brewery-db-v1.p.rapidapi.com/breweries/search?query=" + state;
+            var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(uri),
+                Headers =
+                 {
+                         { "x-rapidapi-key", "1dfbf71e41msh870113fa2bffc98p14393fjsnd146183a749a" },
+                         { "x-rapidapi-host", "brianiswu-open-brewery-db-v1.p.rapidapi.com" },
+                },
+            };
+
+            using (var response = await client.SendAsync(request))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResult = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<List<JsonBrewery>>(jsonResult);
+
+
+                }
+            };
+            return null;
+
+        }
+
+
+
+
+
+    }
+}
+
+}
