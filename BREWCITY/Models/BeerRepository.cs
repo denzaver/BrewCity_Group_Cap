@@ -1,4 +1,5 @@
 ﻿using BREWCITY.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,30 @@ namespace BREWCITY.Models
     public class BeerRepository : IBeerRepository
     {
         private readonly ApplicationDbContext _context;
-        public IEnumerable<Beer> GetAllBear => throw new NotImplementedException();
 
-        public IEnumerable<Beer> GetBeerOnSale => throw new NotImplementedException();
+        public BeerRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+        public IEnumerable<Beer> GetAllBear
+        {
+            get
+            {
+                return _context.Beers.Include(c => c.Category);
+            }
+        }
+
+        public IEnumerable<Beer> GetBeerOnSale
+        {
+            get
+            {
+                return _context.Beers.Include(c => c.Category).Where(b => b.OnSale);
+            }
+        }
 
         public Beer GetBeerById(int beerId)
         {
-            throw new NotImplementedException();
+            return _context.Beers.FirstOrDefault(b => b.BeerId == beerId);
         }
     }
 }
