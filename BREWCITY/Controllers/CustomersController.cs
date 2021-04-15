@@ -291,7 +291,7 @@ namespace BREWCITY.Controllers
 
         [HttpPost, ActionName("EditReview")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditReview(int id, [Bind("Id, Text, BeerId, CustomerId")] Review review)
+        public async Task<IActionResult> EditReview(int id, [Bind("ReviewId, Text, BeerId, CustomerId")] Review review)
         {
             if (id != review.ReviewId)
             {
