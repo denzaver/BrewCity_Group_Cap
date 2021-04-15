@@ -92,7 +92,7 @@ namespace BREWCITY.Controllers
             return View(customer);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("CreateReview")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateReview(int id, [Bind("Id,Text,BeerId,CustomerId")] Review review)
         {
@@ -180,7 +180,7 @@ namespace BREWCITY.Controllers
             }
             return View(review);
         }
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteReview")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteReview(int id)
         {
@@ -240,7 +240,7 @@ namespace BREWCITY.Controllers
             return View(review);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("EditReview")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditReview(int id, [Bind("Id, Text, BeerId, CustomerId")] Review review)
         {
