@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BREWCITY.ViewModels
 {
-    public class ShoppingCartViewModel
+    public class ShoppingCartIndexViewModel
     {
         public ShoppingCart ShoppingCart { get; set; }
         public decimal ShoppingCartTotal { get; set; }

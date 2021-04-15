@@ -26,9 +26,6 @@ namespace BREWCITY.Models
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
 
-        [ForeignKey("Beer")]
-        public int BeerId { get; set; }
-        public Beer Beer { get; set; }
 
 
         public ShoppingCart(ApplicationDbContext context)
@@ -77,7 +74,7 @@ namespace BREWCITY.Models
         //    // first we need to make sure the beer actually exists
         //{
         
-        public int RemoveFromCart(Beer beer) // this is an int because we are decreasing the amount of a SINGLE item
+        public int RemoveFromCart(Beer beer) 
         {
             var shoppingCartItem = _context.ShoppingCartItems.SingleOrDefault(
             s => s.Beer.BeerId == beer.BeerId && s.ShoppingCartId == ShoppingCartId); //we are making sure the shopping cart Id exists, same logic as the AddToCart
@@ -123,7 +120,6 @@ namespace BREWCITY.Models
                 .Select(c => c.Beer.Price * c.Amount).Sum();
 
             return total;
-
         }
     }
 

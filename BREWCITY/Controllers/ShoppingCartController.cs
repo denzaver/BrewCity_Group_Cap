@@ -23,12 +23,12 @@ namespace BREWCITY.Controllers
         {
             _shoppingCart.ShoppingCartItems = _shoppingCart.GetShoppingCartItems(); //retreives all items and sets the shoppingcartitems prop in shopping cart
 
-            var shoppingCartViewModel = new ShoppingCartViewModel //takes the total items and amount and puts them into this view model
+            ShoppingCartIndexViewModel shoppingCartIndexViewModel = new ShoppingCartIndexViewModel //takes the total items and amount and puts them into this view model
             {
                 ShoppingCart = _shoppingCart,
                 ShoppingCartTotal = _shoppingCart.GetShoppingCartTotal()
             };
-            return View(shoppingCartViewModel);
+            return View(shoppingCartIndexViewModel);
         }
 
         public RedirectToActionResult AddToShoppingCart(int beerId) //action that adds item to the shopping cart and redirects to the updates shopping cart
@@ -42,5 +42,19 @@ namespace BREWCITY.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public RedirectToActionResult RemoveFromShoppingCart(int beerId)
+        {
+            var selectedBeer = _beerRepository.GetAllBeer.FirstOrDefault(b => b.BeerId == beerId);
+
+            if (selectedBeer != null)
+            {
+                _shoppingCart.RemoveFromCart(selectedBeer);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
     }
 }
