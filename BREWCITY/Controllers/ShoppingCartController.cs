@@ -10,10 +10,12 @@ namespace BREWCITY.Controllers
 {
     public class ShoppingCartController : Controller
     {
+        private readonly IBeerRepository _beerRepository;
         private readonly ShoppingCart _shoppingCart;
 
-        public ShoppingCartController(ShoppingCart shoppingCart)
+        public ShoppingCartController(IBeerRepository beerRepository, ShoppingCart shoppingCart)
         {
+            _beerRepository = beerRepository;
             _shoppingCart = shoppingCart;
         }
 
@@ -29,9 +31,16 @@ namespace BREWCITY.Controllers
             return View(shoppingCartViewModel);
         }
 
-        //public RedirectToActionResult AddToShoppingCart(int beerId) //action that adds item to the shopping cart and redirects to the updates shopping cart
-        //{
-        //    ShoppingCart selectedBeer = 
-        //}
+        public RedirectToActionResult AddToShoppingCart(int beerId) //action that adds item to the shopping cart and redirects to the updates shopping cart
+        {
+            var selectedBeer = _beerRepository.GetAllBeer.FirstOrDefault(b => b.BeerId == beerId);
+
+            if (selectedBeer != null)
+            {
+                _shoppingCart.AddToCart(selectedBeer, 1);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
