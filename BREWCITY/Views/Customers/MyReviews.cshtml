@@ -7,7 +7,7 @@
 <h1>MyReviews</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Index">Home</a>
 </p>
 <table class="table">
     <thead>
@@ -27,8 +27,8 @@
             </td>
             
             <td>
-                <a asp-action="EditReview" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="DeleteReview" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="EditReview" asp-route-id="@item.ReviewId">Edit</a> |
+                <a asp-action="DeleteReview" asp-route-id="@item.ReviewId">Delete</a>
             </td>
         </tr>
 }

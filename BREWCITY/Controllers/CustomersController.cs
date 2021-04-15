@@ -36,7 +36,9 @@ namespace BREWCITY.Controllers
         public IActionResult FilterBeers()
         {
             var types = _context.Beers.Select(x => x.Type).Distinct().ToList();
+            types.Add("none");
             var breweryNames = _context.Breweries.Select(x => x.BusinessName).Distinct().ToList();
+            breweryNames.Add("none");
             ViewBag.Type = new SelectList(types);
             ViewBag.Brewery = new SelectList(breweryNames);
             var beers = _context.Beers;
@@ -47,9 +49,36 @@ namespace BREWCITY.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult FilterBeers(string type, string breweryName)
         {
-            var brewery = _context.Breweries.Where(x => x.BusinessName == breweryName).FirstOrDefault();
-            var beerList = _context.Beers.Where(x => x.Type == type || x.BreweryId == brewery.BreweryId);
-            return View(beerList);
+            var types = _context.Beers.Select(x => x.Type).Distinct().ToList();
+            var breweryNames = _context.Breweries.Select(x => x.BusinessName).Distinct().ToList();
+            ViewBag.Type = new SelectList(types);
+            types.Add("none");
+            ViewBag.Brewery = new SelectList(breweryNames);
+            breweryNames.Add("none");
+            Brewery brewery = _context.Breweries.Where(x => x.BusinessName == breweryName).FirstOrDefault(); 
+            List<Beer> beerList = null;
+
+            if (type != "none" && breweryName != "none")
+            {
+                  
+                 beerList = _context.Beers.Where(x => x.Type == type && x.BreweryId == brewery.BreweryId).ToList();
+                return View(beerList);
+            }
+            else if(type != "none")
+            {
+                beerList = _context.Beers.Where(x => x.Type == type).ToList();
+                return View(beerList);
+            }
+            else if(breweryName != "none")
+            {
+                beerList = _context.Beers.Where(x => x.BreweryId == brewery.BreweryId).ToList();
+                return View(beerList);
+            }
+            else
+            {
+                return View(NotFound());
+            }
+
         }
 
         // GET: Customers/Details/5
@@ -92,6 +121,8 @@ namespace BREWCITY.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,BusinessName,BusinessRole,StreetAddress,Zipcode,Email,IdentityUserId")] Customer customer)
         {
+            
+
             if (ModelState.IsValid)
             {
                 customer.IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -101,6 +132,13 @@ namespace BREWCITY.Controllers
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             return View(customer);
+        }
+
+        //Get
+        public IActionResult CreateReview()
+        {
+            return View();
+
         }
 
         [HttpPost, ActionName("CreateReview")]
@@ -184,7 +222,7 @@ namespace BREWCITY.Controllers
             {
                 return NotFound();
             }
-            var review = await _context.Reviews.Include(x => x.Text).FirstOrDefaultAsync(x => x.Id == id);
+            var review = await _context.Reviews.Include(x => x.Text).FirstOrDefaultAsync(x => x.ReviewId == id);
             if(review == null)
             {
                 return NotFound();
@@ -253,9 +291,9 @@ namespace BREWCITY.Controllers
 
         [HttpPost, ActionName("EditReview")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditReview(int id, [Bind("Id, Text, BeerId, CustomerId")] Review review)
+        public async Task<IActionResult> EditReview(int id, [Bind("ReviewId, Text, BeerId, CustomerId")] Review review)
         {
-            if (id != review.Id)
+            if (id != review.ReviewId)
             {
                 return NotFound();
             }
@@ -269,7 +307,7 @@ namespace BREWCITY.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(review.Id))
+                    if (!CustomerExists(review.ReviewId))
                     {
                         return NotFound();
                     }
