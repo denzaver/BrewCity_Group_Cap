@@ -18,6 +18,7 @@ namespace BREWCITY.Models
 
         [ForeignKey("Beer")]
         public int BeerId { get; set; }
+        public Beer Beer { get; set; }
 
     }
 }
