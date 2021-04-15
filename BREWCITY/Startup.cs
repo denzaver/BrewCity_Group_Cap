@@ -49,6 +49,7 @@ namespace BREWCITY
                 config.Filters.Add(typeof(GlobalRouting));
             });
 
+            
             services.AddScoped<ShoppingCart>(sc => ShoppingCart.GetCart(sc)); //added shopping cart to our services.
                                                                               //when the user comes to the site, we create a shopping cart - either existing or new instance
                                                                               //ensuring that each user has their own shopping cart
@@ -58,7 +59,9 @@ namespace BREWCITY
             services.AddSession();
 
             services.AddControllersWithViews();
-           
+            services.AddScoped<ICategoryRepository, CategoryRepository>(); //custom service, add scope allows for an instance to be created with each requst and remain active through the entire request until processed
+            services.AddScoped<IBeerRepository, BeerRepository>(); //
+
             //services.AddTransient<BreweryService>();
         }
 
