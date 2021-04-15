@@ -58,7 +58,7 @@ namespace BREWCITY.Controllers
             var details = _context.DeliveryDetailss.Where(d => d.CustomerId == customer.Id).LastOrDefault();
             if(details == null)
             {
-                return View();//fill in later, create deliver details
+                return View("CreateDeliveryDetails");//fill in later, create deliver details
             }
             var state = details.State;
             var city = details.City;
@@ -66,6 +66,28 @@ namespace BREWCITY.Controllers
             var filteredResult = actionResult.Where(b => b.City == city).ToList();
             JsonBrewery[] actionResultArray = filteredResult.ToArray();
             return View(actionResultArray);
+        }
+        // GET: DeliveryDetails/Create
+        public IActionResult CreateDeliveryDetails()
+        {
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id");
+            return View();
+        }
+
+        // POST: DeliveryDetails/Create
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateDeliveryDetails([Bind("Id,CustomerId,ResponsiblePartyName,PhoneNumber,Street,City,State,StateAlcoholLicenceNumber")] DeliveryDetails deliveryDetails)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(deliveryDetails);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", deliveryDetails.CustomerId);
+            return View(deliveryDetails);
         }
 
         // GET: Customers/Create
