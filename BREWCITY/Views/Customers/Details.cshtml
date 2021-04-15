@@ -45,7 +45,7 @@
             <td>
                 <a asp-action="CreateReview" asp-route-id="@item.BeerId">Add Review</a> |
                 <a asp-action="Sales" asp-route-id="@item.BeerId">Sale</a> |
-                <a asp-action="AddToCart" asp-route-id="@item.BeerId">Add To Cart</a>
+                <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-beerId="@item.BeerId">Add To Cart</a>
             </td>
         </tr>
 }

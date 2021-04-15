@@ -1,5 +1,6 @@
 using BREWCITY.ActionFilters;
 using BREWCITY.Data;
+using BREWCITY.Models;
 using BREWCITY.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -48,7 +49,19 @@ namespace BREWCITY
                 config.Filters.Add(typeof(GlobalRouting));
             });
 
+            
+            services.AddScoped<ShoppingCart>(sc => ShoppingCart.GetCart(sc)); //added shopping cart to our services.
+                                                                              //when the user comes to the site, we create a shopping cart - either existing or new instance
+                                                                              //ensuring that each user has their own shopping cart
+                                                                              // since its SCOPED - means the interecation with this shopping cart in the same request will access the same shopping cart
+
+            services.AddHttpContextAccessor();
+            services.AddSession();
+
             services.AddControllersWithViews();
+            /*services.AddScoped<ICategoryRepository, CategoryRepository>();*/ //custom service, add scope allows for an instance to be created with each requst and remain active through the entire request until processed
+            services.AddScoped<IBeerRepository, BeerRepository>(); //
+
             //services.AddTransient<BreweryService>();
         }
 
@@ -68,6 +81,7 @@ namespace BREWCITY
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession(); //adding this allows use to use the 'sessions'. This needs to be placed before the routing 
 
             app.UseRouting();
 
