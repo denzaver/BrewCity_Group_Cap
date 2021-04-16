@@ -13,12 +13,12 @@ namespace BREWCITY.Models
         public int BeerId { get; set; }
         public string BeerName { get; set; }
         public string Type { get; set; }
-        public string Description { get; set; }
+        //public string Description { get; set; }
         public int Stock { get; set; }
         public decimal Price { get; set; }
-        public string ImageThumbnailUrl { get; set; }
-        public bool OnSale { get; set; }
-        public bool InStock { get; set; }
+        //public string ImageThumbnailUrl { get; set; }
+        //public bool OnSale { get; set; }
+        //public bool InStock { get; set; }
 
         //[ForeignKey("Category")]
         //public int CategoryId { get; set; }

@@ -325,5 +325,46 @@ namespace BREWCITY.Controllers
             }
             return View(nameof(MyReviews));
         }
+
+
+        ////////// hey 
+        // I'm gonna put some shopping cart stuff here
+
+        public async Task<IActionResult> AddToCart(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var beer = await _context.Beers.FindAsync(id);
+            if (beer == null)
+            {
+                return NotFound();
+            }
+            return View(beer);
+        }
+
+        [HttpPost, ActionName("AddToCart")]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddToCart(int beerId, int amount)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            var beer = _context.Beers.Where(br => br.BeerId == beerId).FirstOrDefault();
+            TempCart cart = new TempCart();
+            cart.Amount = amount;
+            cart.BeerId = beerId;
+            cart.Customer = customer;
+            cart.CustomerId = customer.Id;
+            cart.Beer = beer;
+            //_context.
+            //_context.SaveChanges();
+
+            return View();
+        }
+
+
+
     }
 }
