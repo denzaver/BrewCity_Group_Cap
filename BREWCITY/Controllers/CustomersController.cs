@@ -325,5 +325,91 @@ namespace BREWCITY.Controllers
             }
             return View(nameof(MyReviews));
         }
+
+        [HttpPost, ActionName("SeeSales")]
+        [ValidateAntiForgeryToken]
+        public IActionResult SeeSales()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            List<Sale> sales = null;
+            
+            
+                sales = _context.Sales.Where(x => x.Zip == customer.Zipcode).ToList();
+
+            return View(sales);
+        }
+        public async Task<IActionResult> AddToCart(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var beer = await _context.Beers.FindAsync(id);
+            if (beer == null)
+            {
+                return NotFound();
+            }
+            return View(beer);
+        }
+        [HttpPost, ActionName("AddToCart")]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddToCart(int beerId, int amount)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            var beer = _context.Beers.Where(br => br.BeerId == beerId).FirstOrDefault();
+            TempCart cart = new TempCart();
+            cart.Amount = amount;
+            cart.BeerId = beerId;
+            cart.Customer = customer;
+            cart.CustomerId = customer.Id;
+            cart.Beer = beer;
+            _context.Add(cart);
+            _context.SaveChanges();
+            return View();
+        }
+        [HttpPost, ActionName("RemoveFromCart")]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemoveFromCart(int ShoppingCartId)
+        {
+            var cart = _context.TempCarts.Where(ct => ct.TempCartId == ShoppingCartId);
+            _context.TempCarts.Remove((TempCart)cart);
+            _context.SaveChanges();
+            return View();
+        }
+        [HttpPost, ActionName("ViewCart")]
+        [ValidateAntiForgeryToken]
+        public IActionResult ViewCart()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            var carts = _context.TempCarts.Where(ct => ct.CustomerId == customer.Id);
+            return View(carts);
+        }
+        [HttpPost, ActionName("ClearCart")]
+        [ValidateAntiForgeryToken]
+        public IActionResult ClearCart()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            var carts = _context.TempCarts.Where(ct => ct.CustomerId == customer.Id);
+            _context.TempCarts.Remove((TempCart)carts);
+            return View();
+        }
+       // [HttpPost, ActionName("ViewCost")]
+        //[ValidateAntiForgeryToken]
+       // public IActionResult ViewCost()
+       // {
+           // var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+        //    var carts = _context.TempCarts.Where(ct => ct.CustomerId == customer.Id);
+        //    double total = 0;
+        //    foreach (TempCart cart in carts)
+        //    {
+        //        double tempPrice = (double)cart.Beer.Price;
+        //    }
+        //}
+
     }
 }

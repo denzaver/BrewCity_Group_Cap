@@ -179,8 +179,8 @@ namespace BREWCITY.Migrations
                     b.Property<int>("BeerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShoppingCartId")
-                        .HasColumnType("int");
+                    b.Property<string>("Zip")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("quantity")
                         .HasColumnType("int");
@@ -215,6 +215,31 @@ namespace BREWCITY.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("ShoppingCarts");
+                });
+
+            modelBuilder.Entity("BREWCITY.Models.TempCart", b =>
+                {
+                    b.Property<int>("TempCartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BeerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TempCartId");
+
+                    b.HasIndex("BeerId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("TempCarts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -505,6 +530,25 @@ namespace BREWCITY.Migrations
                 });
 
             modelBuilder.Entity("BREWCITY.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("BREWCITY.Models.Beer", "Beer")
+                        .WithMany()
+                        .HasForeignKey("BeerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BREWCITY.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Beer");
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("BREWCITY.Models.TempCart", b =>
                 {
                     b.HasOne("BREWCITY.Models.Beer", "Beer")
                         .WithMany()

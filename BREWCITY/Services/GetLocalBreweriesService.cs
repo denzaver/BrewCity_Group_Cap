@@ -51,4 +51,3 @@ namespace BREWCITY.Services
     }
 }
 
-}

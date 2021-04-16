@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BREWCITY.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210412200349_postMergeNuke")]
-    partial class postMergeNuke
+    [Migration("20210416035322_Fixed Sale Properties")]
+    partial class FixedSaleProperties
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -148,7 +148,7 @@ namespace BREWCITY.Migrations
 
             modelBuilder.Entity("BREWCITY.Models.Review", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ReviewId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -162,7 +162,11 @@ namespace BREWCITY.Migrations
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ReviewId");
+
+                    b.HasIndex("BeerId");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Reviews");
                 });
@@ -177,13 +181,15 @@ namespace BREWCITY.Migrations
                     b.Property<int>("BeerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShoppingCartId")
-                        .HasColumnType("int");
+                    b.Property<string>("Zip")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BeerId");
 
                     b.ToTable("Sales");
                 });
@@ -211,6 +217,31 @@ namespace BREWCITY.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("ShoppingCarts");
+                });
+
+            modelBuilder.Entity("BREWCITY.Models.TempCart", b =>
+                {
+                    b.Property<int>("TempCartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BeerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TempCartId");
+
+                    b.HasIndex("BeerId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("TempCarts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -443,11 +474,13 @@ namespace BREWCITY.Migrations
 
             modelBuilder.Entity("BREWCITY.Models.Beer", b =>
                 {
-                    b.HasOne("BREWCITY.Models.Brewery", null)
-                        .WithMany("BeerList")
+                    b.HasOne("BREWCITY.Models.Brewery", "Brewery")
+                        .WithMany()
                         .HasForeignKey("BreweryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Brewery");
                 });
 
             modelBuilder.Entity("BREWCITY.Models.Brewery", b =>
@@ -468,7 +501,56 @@ namespace BREWCITY.Migrations
                     b.Navigation("IdentityUser");
                 });
 
+            modelBuilder.Entity("BREWCITY.Models.Review", b =>
+                {
+                    b.HasOne("BREWCITY.Models.Beer", "Beer")
+                        .WithMany()
+                        .HasForeignKey("BeerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BREWCITY.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Beer");
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("BREWCITY.Models.Sale", b =>
+                {
+                    b.HasOne("BREWCITY.Models.Beer", "Beer")
+                        .WithMany()
+                        .HasForeignKey("BeerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Beer");
+                });
+
             modelBuilder.Entity("BREWCITY.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("BREWCITY.Models.Beer", "Beer")
+                        .WithMany()
+                        .HasForeignKey("BeerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BREWCITY.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Beer");
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("BREWCITY.Models.TempCart", b =>
                 {
                     b.HasOne("BREWCITY.Models.Beer", "Beer")
                         .WithMany()
@@ -536,11 +618,6 @@ namespace BREWCITY.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("BREWCITY.Models.Brewery", b =>
-                {
-                    b.Navigation("BeerList");
                 });
 #pragma warning restore 612, 618
         }

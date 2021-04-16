@@ -23,6 +23,7 @@ namespace BREWCITY.Data
         public DbSet<Sale> Sales { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<TempCart> TempCarts { get; set; }
   
 
         protected override void OnModelCreating(ModelBuilder builder)
