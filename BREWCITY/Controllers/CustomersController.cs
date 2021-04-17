@@ -105,12 +105,12 @@ namespace BREWCITY.Controllers
             }
             return View(beers);
         }
-
-        //public async Task<IActionResult> GetLocalBreweries(string state)
-        //{
-        //    IActionResult actionResult = await _breweryService.GetBreweryList(state);
-        //    return actionResult;
-        //}
+        
+        public IActionResult SeeReviews(int id)
+        {
+            var reviews = _context.Reviews.Where(x => x.BeerId == id);
+            return View(reviews);
+        }
 
         // GET: Customers/Create
         public IActionResult Create()
