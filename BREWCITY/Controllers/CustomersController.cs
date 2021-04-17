@@ -326,6 +326,7 @@ namespace BREWCITY.Controllers
             return View(nameof(MyReviews));
         }
 
+
         [HttpPost, ActionName("SeeSales")]
         [ValidateAntiForgeryToken]
         public IActionResult SeeSales()
@@ -339,12 +340,14 @@ namespace BREWCITY.Controllers
 
             return View(sales);
         }
+
         public async Task<IActionResult> AddToCart(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+
             var beer = await _context.Beers.FindAsync(id);
             if (beer == null)
             {
@@ -352,6 +355,7 @@ namespace BREWCITY.Controllers
             }
             return View(beer);
         }
+
         [HttpPost, ActionName("AddToCart")]
         [ValidateAntiForgeryToken]
         public IActionResult AddToCart(int beerId, int amount)
@@ -365,10 +369,15 @@ namespace BREWCITY.Controllers
             cart.Customer = customer;
             cart.CustomerId = customer.Id;
             cart.Beer = beer;
-            _context.Add(cart);
-            _context.SaveChanges();
+
+            //_context.
+            //_context.SaveChanges();
+
             return View();
         }
+            
+        
+
         [HttpPost, ActionName("RemoveFromCart")]
         [ValidateAntiForgeryToken]
         public IActionResult RemoveFromCart(int ShoppingCartId)
@@ -410,6 +419,7 @@ namespace BREWCITY.Controllers
         //        double tempPrice = (double)cart.Beer.Price;
         //    }
         //}
+
 
     }
 }
