@@ -131,12 +131,13 @@ namespace BREWCITY.Controllers
             if (ModelState.IsValid)
             {
                 customer.IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                _context.Add(customer);
+                
                 TempCart cart = new TempCart();
                 cart.Customer = customer;
                 cart.CustomerId = customer.Id;
                 cart.Beers = null;
                 cart.Amount = 0;
+                _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -363,17 +364,18 @@ namespace BREWCITY.Controllers
 
         [HttpPost, ActionName("AddToCart")]
         [ValidateAntiForgeryToken]
-        public IActionResult AddToCart(int id, Beer beer)
+        public IActionResult AddToCart(int id)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
             var cart = _context.TempCarts.Where(x => x.CustomerId == customer.Id).FirstOrDefault();
+            Beer beer = _context.Beers.Where(x => x.BeerId == id).FirstOrDefault();
             cart.CustomerId = customer.Id;
             cart.Amount += beer.Price;
             cart.Customer = customer;
             cart.TempCartId = cart.TempCartId;
             cart.Beers.Add(beer);
-            beer.Stock = 1;
+            beer.Stock -= 1;
             _context.Update(cart);
             _context.Update(beer);
             _context.SaveChangesAsync();
