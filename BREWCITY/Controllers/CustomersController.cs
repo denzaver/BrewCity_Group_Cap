@@ -132,6 +132,11 @@ namespace BREWCITY.Controllers
             {
                 customer.IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Add(customer);
+                TempCart cart = new TempCart();
+                cart.Customer = customer;
+                cart.CustomerId = customer.Id;
+                cart.Beers = null;
+                cart.Amount = 0;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -358,17 +363,20 @@ namespace BREWCITY.Controllers
 
         [HttpPost, ActionName("AddToCart")]
         [ValidateAntiForgeryToken]
-        public IActionResult AddToCart(int beerId, int amount)
+        public IActionResult AddToCart(int id, Beer beer)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
-            var beer = _context.Beers.Where(br => br.BeerId == beerId).FirstOrDefault();
-            TempCart cart = new TempCart();
-            cart.Amount = amount;
-            cart.BeerId = beerId;
-            cart.Customer = customer;
+            var cart = _context.TempCarts.Where(x => x.CustomerId == customer.Id).FirstOrDefault();
             cart.CustomerId = customer.Id;
-            cart.Beer = beer;
+            cart.Amount += beer.Price;
+            cart.Customer = customer;
+            cart.TempCartId = cart.TempCartId;
+            cart.Beers.Add(beer);
+            beer.Stock = 1;
+            _context.Update(cart);
+            _context.Update(beer);
+            _context.SaveChangesAsync();
 
             //_context.
             //_context.SaveChanges();
@@ -406,19 +414,7 @@ namespace BREWCITY.Controllers
             _context.TempCarts.Remove((TempCart)carts);
             return View();
         }
-       // [HttpPost, ActionName("ViewCost")]
-        //[ValidateAntiForgeryToken]
-       // public IActionResult ViewCost()
-       // {
-           // var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
-        //    var carts = _context.TempCarts.Where(ct => ct.CustomerId == customer.Id);
-        //    double total = 0;
-        //    foreach (TempCart cart in carts)
-        //    {
-        //        double tempPrice = (double)cart.Beer.Price;
-        //    }
-        //}
+       
 
 
     }
