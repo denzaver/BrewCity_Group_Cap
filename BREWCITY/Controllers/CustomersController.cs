@@ -383,15 +383,29 @@ namespace BREWCITY.Controllers
 
             return View();
         }
-            
-        
+        //Get
+        public IActionResult RemoveFromCart(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            var beer = _context.Beers.Where(x => x.BeerId == id).FirstOrDefault();
+            return View(beer);
+        }
 
         [HttpPost, ActionName("RemoveFromCart")]
         [ValidateAntiForgeryToken]
-        public IActionResult RemoveFromCart(int ShoppingCartId)
+        public IActionResult RemoveFromCart(Beer beer)
         {
-            var cart = _context.TempCarts.Where(ct => ct.TempCartId == ShoppingCartId);
-            _context.TempCarts.Remove((TempCart)cart);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
+            var cart = _context.TempCarts.Where(ct => ct.CustomerId == customer.Id).FirstOrDefault();
+            cart.Beers.Remove(beer);
+            beer.Stock += 1;
+            cart.Amount -= beer.Price;
+            cart.CustomerId = customer.Id;
+            cart.Customer = customer;
             _context.SaveChanges();
             return View();
         }
