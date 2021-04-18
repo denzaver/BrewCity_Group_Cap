@@ -396,8 +396,9 @@ namespace BREWCITY.Controllers
 
         [HttpPost, ActionName("RemoveFromCart")]
         [ValidateAntiForgeryToken]
-        public IActionResult RemoveFromCart(Beer beer)
+        public IActionResult RemoveFromCart(int id)
         {
+            var beer = _context.Beers.Where(x => x.BeerId == id).FirstOrDefault();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
             var cart = _context.TempCarts.Where(ct => ct.CustomerId == customer.Id).FirstOrDefault();
@@ -415,8 +416,9 @@ namespace BREWCITY.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
-            var carts = _context.TempCarts.Where(ct => ct.CustomerId == customer.Id);
-            return View(carts);
+            var cart = _context.TempCarts.Where(ct => ct.CustomerId == customer.Id).FirstOrDefault();
+            var beers = cart.Beers;
+            return View(beers);
         }
         [HttpPost, ActionName("ClearCart")]
         [ValidateAntiForgeryToken]
