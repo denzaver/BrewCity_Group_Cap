@@ -374,7 +374,13 @@ namespace BREWCITY.Controllers
             var beer = _context.Beers.Where(br => br.BeerId == beerId).FirstOrDefault();
             cart.Beer = beer;
             cart.BeerId = beer.BeerId;
+            cart.Quantity = 1;
             beer.Stock -= 1;
+            Sale sale = new Sale();
+            sale.Beer = beer;
+            sale.BeerId = beerId;
+            sale.quantity = 1;
+            sale.Zip = customer.Zipcode;
 
             //var cart = _context.ShoppingCarts.Where(x => x.CustomerId == customer.Id).FirstOrDefault();
             //Beer beer = _context.Beers.Where(x => x.BeerId == id).FirstOrDefault();
@@ -384,7 +390,7 @@ namespace BREWCITY.Controllers
             //cart.TempCartId = cart.TempCartId;
             //cart.Beers.Add(beer);
             //beer.Stock -= 1;
-            _context.Update(cart);
+            _context.Add(cart);
             _context.Update(beer);
             _context.SaveChangesAsync();
 
