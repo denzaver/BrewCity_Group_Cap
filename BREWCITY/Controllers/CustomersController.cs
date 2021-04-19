@@ -364,18 +364,26 @@ namespace BREWCITY.Controllers
 
         [HttpPost, ActionName("AddToCart")]
         [ValidateAntiForgeryToken]
-        public IActionResult AddToCart(int id)
+        public IActionResult AddToCart(int beerId)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
-            var cart = _context.TempCarts.Where(x => x.CustomerId == customer.Id).FirstOrDefault();
-            Beer beer = _context.Beers.Where(x => x.BeerId == id).FirstOrDefault();
-            cart.CustomerId = customer.Id;
-            cart.Amount += beer.Price;
+            var cart = new ShoppingCart();
+            cart.Id = customer.Id;
             cart.Customer = customer;
-            cart.TempCartId = cart.TempCartId;
-            cart.Beers.Add(beer);
+            var beer = _context.Beers.Where(br => br.BeerId == beerId).FirstOrDefault();
+            cart.Beer = beer;
+            cart.BeerId = beer.BeerId;
             beer.Stock -= 1;
+
+            //var cart = _context.ShoppingCarts.Where(x => x.CustomerId == customer.Id).FirstOrDefault();
+            //Beer beer = _context.Beers.Where(x => x.BeerId == id).FirstOrDefault();
+            //cart.CustomerId = customer.Id;
+            //cart.Quantity += beer.Price;
+            //cart.Customer = customer;
+            //cart.TempCartId = cart.TempCartId;
+            //cart.Beers.Add(beer);
+            //beer.Stock -= 1;
             _context.Update(cart);
             _context.Update(beer);
             _context.SaveChangesAsync();
@@ -403,12 +411,15 @@ namespace BREWCITY.Controllers
             var beer = _context.Beers.Where(x => x.BeerId == id).FirstOrDefault();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
-            var cart = _context.TempCarts.Where(ct => ct.CustomerId == customer.Id).FirstOrDefault();
-            cart.Beers.Remove(beer);
+            var cartToRemoveByBeer = _context.ShoppingCarts.Where(ct => ct.BeerId == beer.BeerId);
+            var cartToRemove = cartToRemoveByBeer.Where(ct => ct.CustomerId == customer.Id);
+            //var cart = _context.TempCarts.Where(ct => ct.CustomerId == customer.Id).FirstOrDefault();
+            //cart.Beers.Remove(beer);
             beer.Stock += 1;
-            cart.Amount -= beer.Price;
-            cart.CustomerId = customer.Id;
-            cart.Customer = customer;
+            //cart.Amount -= beer.Price;
+            //cart.CustomerId = customer.Id;
+            //cart.Customer = customer;
+            _context.Remove(cartToRemove);
             _context.SaveChanges();
             return View();
         }
@@ -418,8 +429,7 @@ namespace BREWCITY.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
-            var cart = _context.TempCarts.Where(ct => ct.CustomerId == customer.Id).FirstOrDefault();
-            var beers = cart.Beers;
+            var beers = _context.ShoppingCarts.Where(ct => ct.CustomerId == customer.Id).Select(ct => ct.Beer);
             return View(beers);
         }
         //Get
@@ -430,7 +440,7 @@ namespace BREWCITY.Controllers
                 return NotFound();
             }
 
-            var cart = _context.TempCarts.Where(x => x.TempCartId == id).FirstOrDefault();
+            var cart = _context.ShoppingCarts.Where(x => x.CustomerId == id).FirstOrDefault();
             return View(cart);
         }
 
@@ -440,12 +450,19 @@ namespace BREWCITY.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customer = _context.Customers.Where(x => x.IdentityUserId == userId).FirstOrDefault();
-            var cart = _context.TempCarts.Where(ct => ct.TempCartId == id).FirstOrDefault();
-            cart.TempCartId = cart.TempCartId;
-            cart.CustomerId = customer.Id;
-            cart.Customer = customer;
-            cart.Amount = 0;
-            cart.Beers = null;
+            var carts = _context.ShoppingCarts.Where(ct => ct.CustomerId == id);
+            foreach(ShoppingCart cart in carts)
+            {
+                cart.Beer.Stock += 1;
+                _context.Update(cart.Beer);
+                _context.Remove(cart);
+                _context.SaveChanges();
+            }
+            //carts.TempCartId = cart.TempCartId;
+            //carts.CustomerId = customer.Id;
+            //carts.Customer = customer;
+            //carts.Amount = 0;
+            //carts.Beers = null;
             
             return View();
         }

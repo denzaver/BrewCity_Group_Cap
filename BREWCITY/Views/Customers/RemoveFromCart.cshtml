@@ -1,4 +1,4 @@
-﻿@model BREWCITY.Models.TempCart
+﻿@model BREWCITY.Models.ShoppingCart
 
 @{
     ViewData["Title"] = "RemoveFromCart";
@@ -12,11 +12,11 @@
     <div class="col-md-4">
         <form asp-action="RemoveFromCart">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="TempCartId" />
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CustomerId" class="control-label"></label>
