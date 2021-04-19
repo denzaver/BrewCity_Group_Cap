@@ -15,12 +15,14 @@ namespace BREWCITY.Controllers
     public class CustomersController : Controller
     {
         private readonly ApplicationDbContext _context;
-        //private readonly BreweryService _breweryService;
+        private readonly IGetLocalBreweriesService _getLocalBreweriesService;
+        private readonly IGoogleMapService _googleMapService;
 
-        public CustomersController(ApplicationDbContext context) //, BreweryService breweryService)
+        public CustomersController(ApplicationDbContext context, IGetLocalBreweriesService getLocalBreweriesService, IGoogleMapService googleMapService)
         {
             _context = context;
-            //_breweryService = breweryService;
+            _getLocalBreweriesService = getLocalBreweriesService;
+            _googleMapService = googleMapService;
         }
 
         // GET: Customers
@@ -36,6 +38,57 @@ namespace BREWCITY.Controllers
 
             var breweries = _context.Breweries.Where(x => x.ZipCode == customer.Zipcode);
             return View(breweries);
+        }
+        public async Task<IActionResult> GetList(Customer customer)
+        {
+
+
+
+            var deliveryDetails = _context.DeliveryDetailss.Where(d => d.CustomerId == customer.Id);
+            if (customer == null)
+            {
+                return View("Create");
+            }
+            var details = _context.DeliveryDetailss.Where(d => d.CustomerId == customer.Id).LastOrDefault();
+            if (details == null)
+            {
+                return View("CreateDeliveryDetails");//fill in later, create deliver details
+            }
+
+
+
+            var state = details.State;
+            var city = details.City;
+            var actionResult = await _getLocalBreweriesService.GetLocalBreweries(state);
+            var filteredResult = actionResult.Where(b => b.City == city).ToList();
+
+            //maps begin
+            var listOfAddresses = new List<string>();
+
+            foreach (var a in filteredResult)
+            {
+                var str = a.Street + a.City + a.State;
+                var stringAddress = str.ToString();
+                listOfAddresses.Add(stringAddress);
+
+            }
+            var count = filteredResult.Count() - 10;
+
+            for (var i = count; i > 0; i--)
+            {
+                listOfAddresses.RemoveAt(10);
+            }
+            var data1 = _googleMapService.GetGoogleMap(listOfAddresses);
+            var data = data1.ToString();
+            var base64Data = Regex.Match(data, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+            //var map = Convert.FromBase64String(base64Data);
+            ViewBag.Map = base64Data;
+            //maps end
+
+
+
+            JsonBrewery[] actionResultArray = filteredResult.ToArray();
+            return View(actionResultArray);
         }
 
         public IActionResult FilterBeers()

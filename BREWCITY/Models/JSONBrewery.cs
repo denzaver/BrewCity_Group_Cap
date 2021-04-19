@@ -1,12 +1,15 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace BREWCITY.Models
 {
     public class JsonBrewery
     {
+
         [JsonProperty(PropertyName = "id")]
         public int Id { get; set; }
         [JsonProperty(PropertyName = "obdb_id")]
@@ -18,22 +21,27 @@ namespace BREWCITY.Models
         [JsonProperty(PropertyName = "street")]
         public string Street { get; set; }
         [JsonProperty(PropertyName = "address_2")]
+        [NotMapped]
         public object AddressTwo { get; set; }
         [JsonProperty(PropertyName = "address_3")]
+        [NotMapped]
         public object AddressThree { get; set; }
         [JsonProperty(PropertyName = "city")]
         public string City { get; set; }
         [JsonProperty(PropertyName = "state")]
         public string State { get; set; }
         [JsonProperty(PropertyName = "county_province")]
+        [NotMapped]
         public object County { get; set; }
         [JsonProperty(PropertyName = "postal_code")]
         public string ZipCode { get; set; }
         [JsonProperty(PropertyName = "country")]
         public string Country { get; set; }
         [JsonProperty(PropertyName = "longitude")]
+        [NotMapped]
         public object Longitude { get; set; }
         [JsonProperty(PropertyName = "latitude")]
+        [NotMapped]
         public object Latitude { get; set; }
         [JsonProperty(PropertyName = "phone")]
         public string PhoneNumber { get; set; }
@@ -43,5 +51,6 @@ namespace BREWCITY.Models
         public DateTime UpdatedAt { get; set; }
         [JsonProperty(PropertyName = "created_at")]
         public DateTime CreatedAt { get; set; }
+
     }
 }

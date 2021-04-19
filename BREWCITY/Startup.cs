@@ -62,7 +62,8 @@ namespace BREWCITY
             /*services.AddScoped<ICategoryRepository, CategoryRepository>();*/ //custom service, add scope allows for an instance to be created with each requst and remain active through the entire request until processed
             services.AddScoped<IBeerRepository, BeerRepository>(); //
 
-            //services.AddTransient<BreweryService>();
+            services.AddTransient<IGetLocalBreweriesService, GetLocalBreweriesService>();
+            services.AddTransient<IGoogleMapService, GoogleMapService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
