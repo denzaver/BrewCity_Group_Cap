@@ -22,23 +22,23 @@ namespace BREWCITY.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Sale> Sales { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+        //public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<TempCart> TempCarts { get; set; }
-  
+        //public IEnumerable<Category> Categories { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.Entity<IdentityRole>()
                 .HasData(
-                new IdentityRole
-                {
-                    Id = "2977ce1c-9089-4508-be3d-02e1cda9e07c",
-                    Name = "Admin",
-                    NormalizedName = "ADMIN",
-                    ConcurrencyStamp = "351ab8f6-41be-426b-9974-3bc2f5a75bff"
+                   new IdentityRole
+                   {
+                       Id = "2977ce1c-9089-4508-be3d-02e1cda9e07c",
+                       Name = "Admin",
+                       NormalizedName = "ADMIN",
+                       ConcurrencyStamp = "351ab8f6-41be-426b-9974-3bc2f5a75bff"
 
-                },
+                   },
                   new IdentityRole
                   {
                       Id = "7e82de51-7342-41f0-bffa-ff154800a55b",
